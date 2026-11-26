@@ -297,9 +297,16 @@ public class SystemCleanerManager: ObservableObject {
     }
 
     /// Scans the children of a folder and computes sizes in parallel.
+    nonisolated private static func isOwnedByMacOS(_ name: String) -> Bool {
+        let lower = name.lowercased()
+        return lower.hasPrefix("com.apple.") || lower == "apple"
+    }
+
     nonisolated private static func scanChildren(of dir: URL, categoryID: String, running: Set<String>, previous: Set<String>) -> [JunkItem] {
         let fm = FileManager.default
-        guard let urls = try? fm.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) else { return [] }
+        guard let all = try? fm.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) else { return [] }
+        // Folders owned by macOS cannot be cleaned, so they are neither listed nor counted (and not even measured).
+        let urls = categoryID == "developer" ? all : all.filter { !isOwnedByMacOS($0.lastPathComponent) }
         var sizes = [Int64](repeating: 0, count: urls.count)
         let lock = NSLock()
         DispatchQueue.concurrentPerform(iterations: urls.count) { i in
@@ -317,8 +324,8 @@ public class SystemCleanerManager: ObservableObject {
                 if let dash = raw.lastIndex(of: "-") { name = String(raw[raw.startIndex..<dash]) }
             } else {
                 if let app = displayName(forBundleID: raw) { name = app }
-                if lower.hasPrefix("com.apple.") || lower == "apple" {
-                    lock = tr("macOS")
+                if isOwnedByMacOS(raw) {
+                    lock = tr("macOS")      // unreachable after the filter above; kept as a safety net
                 } else if !lower.isEmpty, running.contains(where: { lower == $0 || lower.hasPrefix($0 + ".") }) {
                     warn = tr("Running")
                 }
