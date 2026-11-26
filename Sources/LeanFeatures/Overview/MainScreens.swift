@@ -298,10 +298,11 @@ struct SettingsView: View {
                         HStack(spacing: 10) {
                             JIcon(name: "circle.lefthalf.filled")
                             Text(tr("Appearance")).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
-                            Spacer()
+                                .lineLimit(1).fixedSize(horizontal: true, vertical: false)
+                            Spacer(minLength: 4)
                             JSegmented(items: [tr("Auto"), tr("Light"), tr("Dark")],
                                        selection: Binding(get: { appearance.mode }, set: { appearance.mode = $0 }))
-                                .frame(width: 190)
+                                .frame(width: 168)
                         }
                         .padding(.vertical, 8)
                         JDivider()
@@ -335,9 +336,10 @@ struct SettingsView: View {
                         HStack {
                             VStack(alignment: .leading, spacing: 1) {
                                 Text("Helper SMC").font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
+                                // "Installed" means the helper answers with the version THIS app needs, so it matches the app version.
                                 Text(batteryManager.isHelperInstalled
-                                     ? tr("Version \(batteryManager.helperVersion), installed")
-                                     : tr("Not installed"))
+                                     ? tr("Version \(updates.currentVersion), installed")
+                                     : (batteryManager.helperVersion > 0 ? tr("Outdated, reinstall needed") : tr("Not installed")))
                                     .font(.system(size: 12)).foregroundStyle(Pal.ink3)
                             }
                             Spacer()

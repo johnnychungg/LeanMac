@@ -102,7 +102,30 @@ public class BatteryManager: ObservableObject {
         }
     }
 
-    @Published public var lastSleepReport: String = ""
+    /// What happened during the last sleep. Only numbers are stored; the sentence is built at display time so it
+    /// always follows the current language (a stored sentence would stay in the language it was written in).
+    public struct SleepRecord: Codable, Equatable, Sendable {
+        public var seconds: Int
+        public var from: Int
+        public var to: Int
+    }
+    @Published public var lastSleepRecord: SleepRecord?
+
+    public var lastSleepReport: String {
+        guard let r = lastSleepRecord else { return "" }
+        return Self.sleepSummary(r)
+    }
+
+    static func sleepSummary(_ r: SleepRecord) -> String {
+        let hours = r.seconds / 3600
+        let mins = (r.seconds % 3600) / 60
+        return tr("Slept \(hours)h\(mins)m • \(sleepDrainText(from: r.from, to: r.to))")
+    }
+
+    static func sleepDrainText(from: Int, to: Int) -> String {
+        let delta = to - from
+        return delta >= 0 ? tr("Battery drain: 0%") : tr("Battery drain: \(abs(delta))% (\(from)% → \(to)%)")
+    }
 
     private var sleepDate: Date? = nil
     private var sleepBatteryLevel: Int = 0
@@ -227,7 +250,10 @@ public class BatteryManager: ObservableObject {
             self.sleepGuardTurnOffBluetooth = true
         }
 
-        self.lastSleepReport = UserDefaults.standard.string(forKey: "battery_last_sleep_report") ?? ""
+        // The old key held a finished sentence in whatever language was active at the time; drop it.
+        UserDefaults.standard.removeObject(forKey: "battery_last_sleep_report")
+        self.lastSleepRecord = UserDefaults.standard.data(forKey: "battery_last_sleep_record")
+            .flatMap { try? JSONDecoder().decode(SleepRecord.self, from: $0) }
 
         let savedLimit = UserDefaults.standard.integer(forKey: "battery_charge_limit")
         if savedLimit >= 50 && savedLimit <= 100 {
@@ -393,18 +419,10 @@ public class BatteryManager: ObservableObject {
             let elapsed = Date().timeIntervalSince(sDate)
             let hours = Int(elapsed) / 3600
             let mins = (Int(elapsed) % 3600) / 60
-            let delta = currentLevel - sleepBatteryLevel
-
-            let drainText: String
-            if delta >= 0 {
-                drainText = tr("Battery drain: 0%")
-            } else {
-                drainText = tr("Battery drain: \(abs(delta))% (\(sleepBatteryLevel)% → \(currentLevel)%)")
-            }
-
-            let report = tr("Slept \(hours)h\(mins)m • \(drainText)")
-            self.lastSleepReport = report
-            UserDefaults.standard.set(report, forKey: "battery_last_sleep_report")
+            let record = SleepRecord(seconds: Int(elapsed), from: sleepBatteryLevel, to: currentLevel)
+            let drainText = Self.sleepDrainText(from: record.from, to: record.to)
+            self.lastSleepRecord = record
+            UserDefaults.standard.set(try? JSONEncoder().encode(record), forKey: "battery_last_sleep_record")
 
             if isSmartAlertsEnabled {
                 sendNotification(

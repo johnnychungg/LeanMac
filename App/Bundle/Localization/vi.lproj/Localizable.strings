@@ -427,3 +427,4 @@
 "Version %@ needs a newer macOS." = "Phiên bản %@ cần macOS mới hơn.";
 "You are up to date (version %@)." = "Bạn đang dùng bản mới nhất (phiên bản %@).";
 "Version %@ (build %@)" = "Phiên bản %@ (bản dựng %@)";
+"Outdated, reinstall needed" = "Đã cũ, cần cài lại";
