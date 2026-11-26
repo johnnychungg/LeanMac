@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.5 - 2026-11-26
+
+- Battery: show the 'Charge locked' notice once per lock, not on every launch (kept across restarts, 12 h minimum gap)
+- Display check: collapsed by default, one short line per display, details on demand
+
 ## 1.1.4 - 2026-11-26
 
 - Monitor: label the network row Network
