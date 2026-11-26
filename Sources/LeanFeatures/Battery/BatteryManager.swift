@@ -200,7 +200,13 @@ public class BatteryManager: ObservableObject {
     private var lastTempAlertDate: Date? = nil
     private var lastExtDisplayAlertDate: Date? = nil
     private var lastLowBatteryAlertLevel: Int? = nil
-    private var hasAlertedBypassThisSession: Bool = false
+    /// The "Charge locked" notice is informational, so it must not repeat on every app launch or battery wobble.
+    /// The state survives restarts, and the notice is also rate-limited.
+    private var hasAlertedBypassThisSession: Bool {
+        get { UserDefaults.standard.bool(forKey: "battery_lock_notice_shown") }
+        set { UserDefaults.standard.set(newValue, forKey: "battery_lock_notice_shown") }
+    }
+    private static let lockNoticeMinInterval: TimeInterval = 12 * 3600
 
     private var timer: Timer?
     private var timerInterval: TimeInterval = 0
@@ -641,14 +647,17 @@ public class BatteryManager: ObservableObject {
 
         // 3. Informational Alert: Reached limit with AC Bypass active
         if isPluggedIn && isBypassActive && currentLevel >= chargeLimit {
+            let last = UserDefaults.standard.object(forKey: "battery_lock_notice_date") as? Date
             if !hasAlertedBypassThisSession {
                 hasAlertedBypassThisSession = true
+                guard last == nil || Date().timeIntervalSince(last!) > Self.lockNoticeMinInterval else { return }
+                UserDefaults.standard.set(Date(), forKey: "battery_lock_notice_date")
                 sendNotification(
                     title: tr("Charge locked at \(chargeLimit)%"),
                     body: tr("The battery stopped charging; the Mac runs directly on AC power to protect it.")
                 )
             }
-        } else if !isPluggedIn || currentLevel < (chargeLimit - 4) {
+        } else if !isPluggedIn || currentLevel < (chargeLimit - 10) {
             hasAlertedBypassThisSession = false
         }
     }
