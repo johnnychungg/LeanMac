@@ -93,6 +93,12 @@ are very welcome.
 </tr>
 </table>
 
+<div align="center">
+<img src="Docs/images/monitor.png" alt="Monitor tab: CPU, RAM, GPU, battery, SSD, fan and network" width="320">
+&nbsp;&nbsp;
+<img src="Docs/images/displays.png" alt="Displays tab: brightness, resolution and refresh rate per display" width="320">
+</div>
+
 ### 🧹 Cleaner
 - **Junk**: app caches, logs and crash reports, Trash and Xcode DerivedData, listed with sizes. Folders macOS owns are hidden instead of being shown locked.
 - **Uninstall**: removes an app together with its leftovers.

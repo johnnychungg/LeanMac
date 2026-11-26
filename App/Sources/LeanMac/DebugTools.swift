@@ -13,6 +13,7 @@ enum DebugTools {
         // Memory measurement: LEANMAC_AUTOOPEN=1 opens the popover after 2 seconds.
         if ProcessInfo.processInfo.environment["LEANMAC_AUTOOPEN"] != nil {
             if let t = ProcessInfo.processInfo.environment["LEANMAC_SECTION"], let n = Int(t) { SystemCleanerManager.shared.selectedSection = n }
+            if let t = ProcessInfo.processInfo.environment["LEANMAC_HWSUB"], let n = Int(t) { UIState.shared.hardwareSub = n }
             if let t = ProcessInfo.processInfo.environment["LEANMAC_TAB"], let n = Int(t) { UIState.shared.selectedMainTab = n }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { openPopover() }
         }
