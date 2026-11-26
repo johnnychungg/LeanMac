@@ -71,12 +71,14 @@ struct HeaderBar: View {
     var body: some View {
         HStack(spacing: 8) {
             HStack(spacing: 8) {
-                LeanGlyph()
-                    .fill(Pal.accent)
-                    .frame(width: 13, height: 13)
+                // Same colored logo as the menu bar (the L follows the light/dark text color, the leaf stays mint).
+                Image(nsImage: LeanLogo.menuBarImage(size: 24))
+                    .resizable()
                     .frame(width: 24, height: 24)
                     .background(RoundedRectangle(cornerRadius: 7, style: .continuous).fill(Pal.accentBg))
                 Text("LeanMac").font(.system(size: 14, weight: .medium)).foregroundStyle(Pal.ink)
+                Text(UpdateManager.shared.currentVersion).font(.system(size: 11)).foregroundStyle(Pal.ink3)
+                    .padding(.top, 2)
             }
 
             Spacer(minLength: 4)

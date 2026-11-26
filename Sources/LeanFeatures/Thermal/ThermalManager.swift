@@ -492,10 +492,20 @@ public class ThermalManager: ObservableObject {
         pollTimer = t
     }
 
+    /// Fans as the SMC reports them (empty on a fanless Mac). Read only while the popover is open.
+    @Published public private(set) var fans: [FanInfo] = []
+    /// False until the first read, so a Mac with fans never flashes "No fan" while the popover opens.
+    @Published public private(set) var fansRead = false
+
     public func refreshMetrics() {
         // While the popover is CLOSED, prefer reading only the SMC (a few very cheap keys) and skip the 45 HID sensors
         // when the SMC already has CPU data (fall back to HID completely if the SMC returns nothing).
         let smc = smcReader.read()
+        if isPopoverVisible {
+            let newFans = FanReader.read(from: BatteryServices.current.smc)
+            if newFans != fans { fans = newFans }
+            if !fansRead { fansRead = true }
+        }
         var cpu = 0.0, peak = 0.0, gpu = 0.0, bat = 0.0, nand = 0.0, hot = 0.0
         var sensors: [SensorReading] = []
 

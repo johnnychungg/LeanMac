@@ -324,6 +324,31 @@ private enum MonLevel {
 }
 
 /// One row: icon | name | % | temperature (or capacity). No gauge, no extra buttons.
+/// Fan speed (read only). A fanless Mac says so instead of showing an empty row.
+private struct FanRow: View {
+    let fans: [FanInfo]
+    let isLoaded: Bool
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "fan").font(.system(size: 13)).foregroundStyle(Pal.accent).frame(width: 18)
+            Text(tr("Fan")).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
+            Spacer(minLength: 4)
+            if !isLoaded {
+                Text("–").font(.system(size: 12)).foregroundStyle(Pal.ink3)
+            } else if fans.isEmpty {
+                Text(tr("No fan")).font(.system(size: 12)).foregroundStyle(Pal.ink3)
+            } else {
+                Text(fans.map { "\($0.rpm)" }.joined(separator: " / ") + " rpm")
+                    .font(.system(size: 12)).monospacedDigit().foregroundStyle(Pal.ink)
+                    .help(fans.map { tr("Fan \($0.index + 1): \($0.minRPM)–\($0.maxRPM) rpm") }.joined(separator: "\n"))
+            }
+        }
+        .frame(height: 34)
+        .padding(.horizontal, 12)
+    }
+}
+
 private struct MonRow: View {
     let icon: String
     let title: String
@@ -416,6 +441,8 @@ struct ThermalView: View {
                        valueLevel: d.used / d.total > 0.9 ? .warn : .normal,
                        secondary: String(format: "%.0f / %.0f GB", d.used / 1e9, d.total / 1e9))
             }
+            JDivider().padding(.leading, 38)
+            FanRow(fans: thermalManager.fans, isLoaded: thermalManager.fansRead)
             JDivider().padding(.leading, 38)
             HStack(spacing: 8) {
                 Image(systemName: "arrow.up.arrow.down").font(.system(size: 13)).foregroundStyle(Pal.accent).frame(width: 18)

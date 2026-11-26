@@ -31,6 +31,8 @@ public class BatteryManager: ObservableObject {
     @Published public var isBypassActive: Bool = false    // SMC CHTE = 1 (Running direct from AC)
     @Published public var isHelperInstalled: Bool = false
     @Published public var helperVersion: Int = 0
+    /// An older helper answers, but this app needs a newer one (the installed copy is replaced by Install).
+    public var isHelperOutdated: Bool { helperVersion > 0 && helperVersion != PrivilegedHelper.requiredVersion }
     @Published public var isInstallingHelper: Bool = false
     @Published public var statusMessage: String = tr("Checking...")
     @Published public var lastUpdated: Date = Date()
@@ -439,6 +441,7 @@ public class BatteryManager: ObservableObject {
     public func setPopoverVisible(_ visible: Bool) {
         isPopoverVisible = visible
         if visible {
+            offerHelperUpdateIfNeeded()
             refreshBatteryInfo()
             checkSMCBypassStatus()
             evaluatePowerManagement()
@@ -1069,6 +1072,7 @@ public class BatteryManager: ObservableObject {
             DispatchQueue.main.async {
                 self.helperVersion = ver
                 self.isHelperInstalled = isRealReady
+                self.offerHelperUpdateIfNeeded()
                 if self.isProtectionEnabled {
                     self.lastAppliedInhibitState = nil
                     self.checkSMCBypassStatus()
@@ -1077,6 +1081,22 @@ public class BatteryManager: ObservableObject {
                 completion?(isRealReady)
             }
         }
+    }
+
+    /// A newer app can need a newer helper. When that is detected, tell the user once per helper version and, while the
+    /// popover is open (the user is present), start the normal install, which asks for the administrator password.
+    /// If the user cancels, the Settings row keeps an "Update" button; nothing nags again for this helper version.
+    private func offerHelperUpdateIfNeeded() {
+        guard isHelperOutdated, !isInstallingHelper else { return }
+        let key = "helper_update_offered_version"
+        guard UserDefaults.standard.integer(forKey: key) != PrivilegedHelper.requiredVersion else { return }
+        guard isPopoverVisible else {
+            sendNotification(title: tr("LeanMac helper needs an update"),
+                             body: tr("Open LeanMac to update the charge-limit helper."))
+            return
+        }
+        UserDefaults.standard.set(PrivilegedHelper.requiredVersion, forKey: key)
+        installHelper()
     }
 
     public func installHelper(completion: ((Bool) -> Void)? = nil) {

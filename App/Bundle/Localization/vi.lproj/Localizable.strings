@@ -375,7 +375,6 @@
 "Used for sharp live window previews in ⌘+Tab. (Without this, AltTab still functions using app icons)." = "Dùng để chụp ảnh thu nhỏ trực tiếp (Live Thumbnail) sắc nét của các cửa sổ khi bấm ⌘+Tab. (Nếu không cấp, AltTab vẫn dùng được nhưng chỉ hiện icon).";
 "Utilities" = "Tiện ích";
 "Verified" = "Đã cấp thật";
-"Version %@, installed" = "Phiên bản %1$@, đã cài";
 "Virtual Display" = "Màn hình ảo";
 "W Close" = "W Đóng";
 "Waiting for keys…" = "Đang chờ phím…";
@@ -427,4 +426,10 @@
 "Version %@ needs a newer macOS." = "Phiên bản %@ cần macOS mới hơn.";
 "You are up to date (version %@)." = "Bạn đang dùng bản mới nhất (phiên bản %@).";
 "Version %@ (build %@)" = "Phiên bản %@ (bản dựng %@)";
-"Outdated, reinstall needed" = "Đã cũ, cần cài lại";
+"Fan" = "Quạt";
+"No fan" = "Không có quạt";
+"Fan %@: %@–%@ rpm" = "Quạt %1$@: %2$@–%3$@ vòng/phút";
+"Installed" = "Đã cài";
+"Update needed" = "Cần cập nhật";
+"LeanMac helper needs an update" = "Helper của LeanMac cần cập nhật";
+"Open LeanMac to update the charge-limit helper." = "Mở LeanMac để cập nhật helper giới hạn sạc.";

@@ -25,11 +25,8 @@ struct UpdateSettingsCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 10) {
                     JIcon(name: "arrow.down.circle")
-                    VStack(alignment: .leading, spacing: 1) {
-                        Text("LeanMac \(updates.currentVersion)").font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
-                        Text(statusText).font(.system(size: 12)).foregroundStyle(Pal.ink3)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
+                    Text(statusText).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
+                        .fixedSize(horizontal: false, vertical: true)
                     Spacer()
                     if updates.isAvailableInThisBuild { actionButtons }
                 }
