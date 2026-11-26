@@ -449,7 +449,7 @@ struct ThermalView: View {
             JDivider().padding(.leading, 38)
             HStack(spacing: 8) {
                 Image(systemName: "arrow.up.arrow.down").font(.system(size: 13)).foregroundStyle(Pal.accent).frame(width: 18)
-                Text(tr("Net")).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
+                Text(tr("Network")).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
                 Spacer(minLength: 4)
                 Text("↓ \(NetRate.format(monitor.netDownBps))   ↑ \(NetRate.format(monitor.netUpBps))")
                     .font(.system(size: 12)).monospacedDigit().foregroundStyle(Pal.ink)
