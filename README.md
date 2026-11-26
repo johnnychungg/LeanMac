@@ -22,7 +22,7 @@ The charge limit has a watchdog: if LeanMac is killed, the helper releases the l
 This is an early community release. Please read these before installing:
 - **Privileged helper.** The charge limit needs a small root helper (`/Library/PrivilegedHelperTools/com.local.leanmac.*`)
   plus a sudoers rule for one user. Installing it asks for your administrator password. Without it the app still runs
-  (`./build.sh --dev` builds a contributor mode that never writes the SMC). Details: [Docs/SECURITY.md](Docs/SECURITY.md).
+  (`./build.sh --dev` builds a contributor mode that never writes the SMC). Details: [.github/SECURITY.md](.github/SECURITY.md).
 - **Private macOS interfaces.** A few features use undocumented APIs that may break on any macOS update; the list is in
   [Docs/third-party.md](Docs/third-party.md). They fail soft (the feature turns off).
 - **Battery behavior changes** (charge limit, calibration) have been tested on a limited set of Macs. Try them while
@@ -45,4 +45,4 @@ Requirements: macOS 14+, Xcode (or the Command Line Tools), OpenSSL 3 (`brew ins
 Logs go to `~/Library/Logs/LeanMac/leanmac.log`.
 
 ## Contributing
-See [Docs/CONTRIBUTING.md](Docs/CONTRIBUTING.md), [Docs/ARCHITECTURE.md](Docs/ARCHITECTURE.md), [Docs/SECURITY.md](Docs/SECURITY.md) and [Docs/CODE_OF_CONDUCT.md](Docs/CODE_OF_CONDUCT.md).
+See [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md), [Docs/ARCHITECTURE.md](Docs/ARCHITECTURE.md), [.github/SECURITY.md](.github/SECURITY.md) and [.github/CODE_OF_CONDUCT.md](.github/CODE_OF_CONDUCT.md).
