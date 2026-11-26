@@ -76,7 +76,7 @@ On first launch LeanMac follows your macOS language; changing it in Settings app
 ### ✨ And also
 - **Signed, user-confirmed updates.** LeanMac tells you when a new version exists. It downloads and installs only after you press Install, and only if the download carries the maintainer's signature.
 - **Light, dark and automatic appearance**, and **launch at login**.
-- A **permissions hub** that shows which permissions are granted, why each is needed, and links to the right System Settings page.
+- A **permissions hub** that shows which permissions are granted, why each is needed, and lets you grant them with one click.
 - Small and quiet: it pauses sampling and background timers when the Mac sleeps.
 
 **Deliberately left out** because they are risky or easy to get wrong: fan control, process freezing, virtual displays, clipboard history, mouse chords, hiding menu bar icons, disk speed tests.
