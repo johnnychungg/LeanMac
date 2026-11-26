@@ -339,7 +339,9 @@ private struct FanRow: View {
             } else if fans.isEmpty {
                 Text(tr("No fan")).font(.system(size: 12)).foregroundStyle(Pal.ink3)
             } else {
-                Text(fans.map { "\($0.rpm)" }.joined(separator: " / ") + " rpm")
+                // Apple Silicon stops the fans completely when the Mac is cool, so 0 rpm is normal, not missing data.
+                Text(fans.allSatisfy { $0.rpm == 0 } ? tr("Idle, fans stopped")
+                     : fans.map { "\($0.rpm)" }.joined(separator: " / ") + " rpm")
                     .font(.system(size: 12)).monospacedDigit().foregroundStyle(Pal.ink)
                     .help(fans.map { tr("Fan \($0.index + 1): \($0.minRPM)–\($0.maxRPM) rpm") }.joined(separator: "\n"))
             }
