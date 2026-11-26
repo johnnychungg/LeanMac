@@ -1,0 +1,24 @@
+# Known architecture debt. SPDX-License-Identifier: GPL-3.0-only
+#
+# Scripts/check-architecture.sh fails when a file breaks a rule and is NOT listed here.
+# Entries may only be removed, never added, without a maintainer's review (see CODEOWNERS).
+# Format:  <rule>  <path>   # why
+#
+# Rules:
+#   features-import-platform   a LeanFeatures file imports LeanPlatform directly instead of using a port from LeanDomain
+#   features-import-iokit      a LeanFeatures file imports IOKit directly (the sampling code belongs in LeanPlatform)
+#   features-use-process       a LeanFeatures file starts a Process / NSAppleScript itself (use Shell.runner)
+#
+# To pay a debt: add a port in Sources/LeanDomain/Ports, an adapter in Sources/LeanPlatform, inject it
+# (see Battery for the finished example), then delete the line.
+
+features-import-platform  Sources/LeanFeatures/Screenshot/ScreenshotManager.swift       # uses ScreenshotAnnotationRenderer (needs a CaptureRendering port)
+features-import-platform  Sources/LeanFeatures/Screenshot/ScreenshotOverlayView.swift   # same renderer
+features-import-platform  Sources/LeanFeatures/Display/DisplayModeManager.swift         # default CoreGraphicsDisplayModeBackend (inject from AppContainer)
+features-import-platform  Sources/LeanFeatures/Display/DisplayManager.swift             # IODisplayCreateInfoDictionary / display bridge
+features-import-platform  Sources/LeanFeatures/Overview/MainScreens.swift               # LaunchAtLoginManager (needs a LaunchAtLogin port)
+
+features-import-iokit     Sources/LeanFeatures/Display/DisplayManager.swift             # display name lookup through the IORegistry
+features-import-iokit     Sources/LeanFeatures/Monitor/SystemMonitorManager.swift       # CPU/GPU samplers (move to Platform behind a SystemSampling port)
+features-import-iokit     Sources/LeanFeatures/Thermal/ThermalManager.swift             # SMC/HID temperature sensors
+features-import-iokit     Sources/LeanFeatures/Battery/CaffeinateManager.swift          # IOPMAssertion (needs a SleepAssertion port)

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>en</string>
+        <string>vi</string>
+    </array>
+    <key>CFBundleExecutable</key>
+    <string>LeanMac</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.local.jmac</string>
+    <key>CFBundleName</key>
+    <string>LeanMac</string>
+    <key>CFBundleDisplayName</key>
+    <string>LeanMac</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
+    <key>CFBundleVersion</key>
+    <string>1.0.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>14.0</string>
+    <key>LSUIElement</key>
+    <true/>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>LeanMac uses Bluetooth to disconnect devices when you close the lid (Sleep Guard), which saves battery and prevents heat while the Mac sleeps.</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>LeanMac manages Bluetooth power when the Mac goes to sleep to save battery.</string>
+    <key>NSScreenCaptureUsageDescription</key>
+    <string>LeanMac needs screen recording permission to show window previews in the Alt+Tab switcher.</string>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>LeanMac uses AppleEvents to control other apps and displays.</string>
+</dict>
+</plist>

@@ -1,0 +1,5 @@
+/* Vietnamese (vi) permission prompts. Keys match App/Bundle/Info.plist. */
+"NSBluetoothAlwaysUsageDescription" = "LeanMac sử dụng Bluetooth để tự động ngắt kết nối khi gập nắp máy (Sleep Guard), giúp chống tụt pin và chống nóng máy khi ngủ.";
+"NSBluetoothPeripheralUsageDescription" = "LeanMac quản lý nguồn Bluetooth khi máy Mac vào chế độ ngủ để tiết kiệm pin.";
+"NSScreenCaptureUsageDescription" = "LeanMac cần quyền ghi màn hình để hiển thị ảnh xem trước các cửa sổ trong trình chuyển đổi Alt+Tab.";
+"NSAppleEventsUsageDescription" = "LeanMac sử dụng AppleEvents để điều khiển các ứng dụng và màn hình.";

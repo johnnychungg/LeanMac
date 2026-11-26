@@ -1,0 +1,260 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-3.0-only
+# LeanMac Power & Battery SMC Management Helper (v1: adds discharging while plugged in, for calibration)
+
+# Runs as root through sudo: it never trusts the caller's $PATH and only uses an smc that is a regular, root-owned file
+# next to the helper (installed by install-helper.sh). It never looks for smc in a user-writable folder.
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin
+SMC="/Library/PrivilegedHelperTools/com.local.leanmac.smc"
+
+if [ ! -x "$SMC" ] || [ -L "$SMC" ] || [ "$(stat -f %u "$SMC")" != "0" ]; then
+    echo "ERROR: smc binary not found"
+    exit 1
+fi
+
+# Valid charge limit: an integer 20..100 only. It must be checked BEFORE it reaches $(( )) / printf
+# because bash evaluates arithmetic even for strings like 'a[$(command)]'.
+valid_limit() {
+    case "$1" in ''|*[!0-9]*) return 1 ;; esac
+    [ "$1" -ge 20 ] && [ "$1" -le 100 ]
+}
+
+
+# ── Watchdog: if LeanMac dies (kill -9/crash) while the charge is locked, release the lock by itself ──
+WD_PIDFILE="/var/run/com.local.leanmac.watchdog.pid"
+
+watchdog_alive() {
+    [ -f "$WD_PIDFILE" ] || return 1
+    local pid
+    pid=$(cat "$WD_PIDFILE" 2>/dev/null)
+    case "$pid" in ''|*[!0-9]*) return 1 ;; esac
+    # Only treat it as alive if it really is this helper process (avoids a reused PID)
+    ps -p "$pid" -o command= 2>/dev/null | grep -q "leanmac.power"
+}
+
+stop_watchdog() {
+    if watchdog_alive; then
+        kill "$(cat "$WD_PIDFILE")" 2>/dev/null || true
+    fi
+    rm -f "$WD_PIDFILE"
+}
+
+start_watchdog() {
+    watchdog_alive && return 0
+    nohup /bin/bash "$0" watchdog "$1" </dev/null >/dev/null 2>&1 &
+    echo $! > "$WD_PIDFILE"
+}
+
+# CHIE (Apple Silicon, macOS 14+): 08 = cut the adapter so the Mac runs on battery while plugged in, 00 = normal
+adapter_disabled() {
+    "$SMC" -k CHIE -r 2>/dev/null | grep -q "bytes 08"
+}
+
+check_key_exists() {
+    local key="$1"
+    local out
+    out=$("$SMC" -k "$key" -r 2>&1 || true)
+    if echo "$out" | grep -qv "no data" && echo "$out" | grep -q "$key"; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+case "$1" in
+    status)
+        BYPASSED=0
+        FOUND_KEY=0
+
+        if check_key_exists "CHTE"; then
+            FOUND_KEY=1
+            OUT=$("$SMC" -k CHTE -r 2>/dev/null || true)
+            echo "$OUT"
+            if echo "$OUT" | grep -q "01 00 00 00" || echo "$OUT" | grep -q "16777216"; then
+                BYPASSED=1
+            fi
+        fi
+
+        if check_key_exists "CH0B"; then
+            FOUND_KEY=1
+            OUT=$("$SMC" -k CH0B -r 2>/dev/null || true)
+            echo "$OUT"
+            if echo "$OUT" | grep -q "02"; then
+                BYPASSED=1
+            fi
+        fi
+
+        if check_key_exists "bfF0"; then
+            FOUND_KEY=1
+            OUT=$("$SMC" -k bfF0 -r 2>/dev/null || true)
+            echo "$OUT"
+            if echo "$OUT" | grep -q "02" || echo "$OUT" | grep -q "\[ui8 \]  2" || echo "$OUT" | grep -q "\[ui8 \]  1"; then
+                BYPASSED=1
+            fi
+        fi
+
+        if check_key_exists "BCLM"; then
+            FOUND_KEY=1
+            OUT=$("$SMC" -k BCLM -r 2>/dev/null || true)
+            echo "$OUT"
+            if echo "$OUT" | grep -qv "100" && echo "$OUT" | grep -qv "(bytes 64)" && echo "$OUT" | grep -qv "(bytes 00)"; then
+                BYPASSED=1
+            fi
+        fi
+
+        if check_key_exists "CHLT"; then
+            OUT=$("$SMC" -k CHLT -r 2>/dev/null || true)
+            echo "$OUT"
+        fi
+
+        if [ "$FOUND_KEY" -eq 1 ]; then
+            echo "BYPASS:$BYPASSED"
+            exit 0
+        else
+            echo "STATUS_UNKNOWN"
+            echo "BYPASS:0"
+            exit 0
+        fi
+        ;;
+    charge-off)
+        LIMIT="${2:-80}"
+        valid_limit "$LIMIT" || { echo "ERROR: invalid limit"; exit 2; }
+        HANDLED=0
+
+        # Method 1: Apple Silicon bfF0 / bfD0 / bfE0 (Firmware Limit for M3, M4, M5 / modern firmware)
+        if check_key_exists "bfF0"; then
+            HEX_UPPER=$(printf "%02x000000" "$LIMIT" 2>/dev/null || echo "50000000")
+            LOWER=$((LIMIT > 4 ? LIMIT - 3 : LIMIT))
+            HEX_LOWER=$(printf "%02x000000" "$LOWER" 2>/dev/null || echo "4d000000")
+            "$SMC" -k bfF0 -w 00 >/dev/null 2>&1 || true
+            if check_key_exists "bfD0"; then "$SMC" -k bfD0 -w "$HEX_UPPER" >/dev/null 2>&1 || true; fi
+            if check_key_exists "bfE0"; then "$SMC" -k bfE0 -w "$HEX_LOWER" >/dev/null 2>&1 || true; fi
+            if "$SMC" -k bfF0 -w 02 >/dev/null 2>&1; then
+                HANDLED=1
+            fi
+        fi
+
+        # Method 2: Apple Silicon CHTE (M1 updated firmware, M2, M3, M4, M5 Air/Pro/Max)
+        if check_key_exists "CHTE"; then
+            "$SMC" -k CHTE -w 01000000 >/dev/null 2>&1 && HANDLED=1
+        fi
+
+        # Method 3: Apple Silicon CH0B / CH0C (M1, M1 Pro, M1 Max)
+        if check_key_exists "CH0B"; then
+            "$SMC" -k CH0B -w 02 >/dev/null 2>&1 && HANDLED=1
+            if check_key_exists "CH0C"; then
+                "$SMC" -k CH0C -w 02 >/dev/null 2>&1 || true
+            fi
+        fi
+
+        # Method 4: Intel / Legacy BCLM (Battery Charge Limit Max)
+        if check_key_exists "BCLM"; then
+            HEX_LIMIT=$(printf "%02x" "$LIMIT" 2>/dev/null || echo "50")
+            "$SMC" -k BCLM -w "$HEX_LIMIT" >/dev/null 2>&1 && HANDLED=1
+        fi
+
+        if [ "$HANDLED" -eq 1 ]; then
+            start_watchdog "$LIMIT"
+            echo "CHARGE_OFF_OK"
+            exit 0
+        else
+            echo "ERROR: No supported SMC charging key found"
+            exit 1
+        fi
+        ;;
+    charge-on)
+        CEILING_LIMIT="${2:-100}"
+        valid_limit "$CEILING_LIMIT" || { echo "ERROR: invalid limit"; exit 2; }
+        HANDLED=0
+
+        # Method 1: Apple Silicon bfF0 / bfD0 / bfE0
+        if check_key_exists "bfF0"; then
+            if [ "$CEILING_LIMIT" -lt 100 ] 2>/dev/null; then
+                HEX_UPPER=$(printf "%02x000000" "$CEILING_LIMIT" 2>/dev/null || echo "50000000")
+                LOWER=$((CEILING_LIMIT > 4 ? CEILING_LIMIT - 3 : CEILING_LIMIT))
+                HEX_LOWER=$(printf "%02x000000" "$LOWER" 2>/dev/null || echo "4d000000")
+                if check_key_exists "bfD0"; then "$SMC" -k bfD0 -w "$HEX_UPPER" >/dev/null 2>&1 || true; fi
+                if check_key_exists "bfE0"; then "$SMC" -k bfE0 -w "$HEX_LOWER" >/dev/null 2>&1 || true; fi
+                "$SMC" -k bfF0 -w 02 >/dev/null 2>&1 && HANDLED=1
+            else
+                "$SMC" -k bfF0 -w 00 >/dev/null 2>&1 && HANDLED=1
+                if check_key_exists "bfD0"; then "$SMC" -k bfD0 -w 64000000 >/dev/null 2>&1 || true; fi
+                if check_key_exists "bfE0"; then "$SMC" -k bfE0 -w 64000000 >/dev/null 2>&1 || true; fi
+            fi
+        fi
+
+        # Method 2: Apple Silicon CHTE (Release instant inhibit so battery can charge up to ceiling)
+        if check_key_exists "CHTE"; then
+            "$SMC" -k CHTE -w 00000000 >/dev/null 2>&1 && HANDLED=1
+        fi
+
+        # Method 3: Apple Silicon CH0B / CH0C (Release instant inhibit)
+        if check_key_exists "CH0B"; then
+            "$SMC" -k CH0B -w 00 >/dev/null 2>&1 && HANDLED=1
+            if check_key_exists "CH0C"; then
+                "$SMC" -k CH0C -w 00 >/dev/null 2>&1 || true
+            fi
+        fi
+
+        # Method 4: Intel / Legacy BCLM
+        if check_key_exists "BCLM"; then
+            HEX_LIMIT=$(printf "%02x" "$CEILING_LIMIT" 2>/dev/null || echo "64")
+            "$SMC" -k BCLM -w "$HEX_LIMIT" >/dev/null 2>&1 && HANDLED=1
+        fi
+
+        if [ "$HANDLED" -eq 1 ]; then
+            # While discharging through CHIE keep the watchdog, so the adapter is still released if LeanMac dies
+            adapter_disabled || stop_watchdog
+            echo "CHARGE_ON_OK"
+            exit 0
+        else
+            echo "ERROR: No supported SMC charging key found"
+            exit 1
+        fi
+        ;;
+    discharge-on)
+        if ! check_key_exists "CHIE"; then
+            echo "ERROR: adapter disable not supported"
+            exit 1
+        fi
+        if "$SMC" -k CHIE -w 08 >/dev/null 2>&1; then
+            start_watchdog 100
+            echo "DISCHARGE_ON_OK"
+            exit 0
+        fi
+        echo "ERROR: could not write CHIE"
+        exit 1
+        ;;
+    discharge-off)
+        if check_key_exists "CHIE"; then
+            "$SMC" -k CHIE -w 00 >/dev/null 2>&1 || { echo "ERROR: could not write CHIE"; exit 1; }
+        fi
+        echo "DISCHARGE_OFF_OK"
+        exit 0
+        ;;
+    watchdog)
+        LIMIT="${2:-100}"
+        valid_limit "$LIMIT" || exit 2
+        MISSING=0
+        while true; do
+            sleep 15
+            if pgrep -x LeanMac >/dev/null 2>&1; then
+                MISSING=0
+            else
+                MISSING=$((MISSING + 1))
+            fi
+            if [ "$MISSING" -ge 2 ]; then
+                rm -f "$WD_PIDFILE"
+                "$SMC" -k CHIE -w 00 >/dev/null 2>&1 || true
+                exec /bin/bash "$0" charge-on "$LIMIT"
+            fi
+        done
+        ;;
+    version)
+        echo "HELPER_VERSION:1"
+        ;;
+    *)
+        echo "Usage: $0 {status|charge-off [limit]|charge-on [limit]|discharge-on|discharge-off|version}"
+        exit 1
+        ;;
+esac

@@ -1,0 +1,6 @@
+# Default owner for everything
+*                         @johnnychungg
+# Privileged helper, installer and SMC code: always needs the owner's review
+/App/Bundle/Helper/       @johnnychungg
+/Sources/LeanDomain/Helper/   @johnnychungg
+/Sources/LeanPlatform/Battery/ @johnnychungg
