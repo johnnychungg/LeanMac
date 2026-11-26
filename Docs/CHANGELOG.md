@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.3 - 2026-11-26
+
+- Appearance: resolve Auto to a concrete scheme at once and redraw the header logo for the chosen scheme
+- Updates card: keep Install and Skip on the message row; only error buttons go below
+
 ## 1.1.2 - 2026-11-26
 
 - README: add Monitor and Displays screenshots; debug hook for the hardware sub-tab
