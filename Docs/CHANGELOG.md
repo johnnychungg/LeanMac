@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.6 - 2026-11-26
+
+- Display tuning (Hardware > Displays): matches the UI size on every display to the built-in screen, picks each display's best refresh rate, and applies the result only after you confirm, with an automatic revert after 15 seconds.
+- Appearance: Auto now switches at once, and the header logo follows Light and Dark.
+- Updates card: Install and Skip stay on the message row; error buttons go below it.
+- Charge-locked notice: shown once per lock instead of on every launch.
+- Monitor: the network row is labelled "Network"; the popover no longer shows its arrow.
+
 ## 1.1.2 - 2026-11-26
 
 - README: add Monitor and Displays screenshots; debug hook for the hardware sub-tab
