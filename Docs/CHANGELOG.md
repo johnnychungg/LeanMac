@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.4 - 2026-11-26
+
+- Monitor: label the network row Network
+- Displays: add a display check that matches UI size and refresh rate, with confirm and auto-revert; hide the popover arrow
+
 ## 1.1.3 - 2026-11-26
 
 - Appearance: resolve Auto to a concrete scheme at once and redraw the header logo for the chosen scheme
