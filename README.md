@@ -107,7 +107,7 @@ are very welcome.
 
 ### ✨ And also
 - **Signed, user-confirmed updates.** LeanMac tells you when a new version exists. It downloads and installs only after you press Install, and only if the download carries the maintainer's signature.
-- **English and Vietnamese** interface (Tiếng Việt), with light, dark and automatic appearance.
+- **Six interface languages** with a dropdown: English, Tiếng Việt, 日本語, 简体中文, 한국어 and Español, plus light, dark and automatic appearance.
 - Small and quiet: it pauses sampling and background timers when the Mac sleeps.
 
 **Deliberately left out** because they are risky or easy to get wrong: fan control, process freezing, virtual displays,
@@ -164,7 +164,7 @@ Releasing: [Docs/releasing.md](Docs/releasing.md).
 
 Bug reports, ideas and pull requests are welcome. Please read [CONTRIBUTING.md](.github/CONTRIBUTING.md) first, and the
 [Code of Conduct](.github/CODE_OF_CONDUCT.md). Report security problems privately, as described in [SECURITY.md](.github/SECURITY.md).
-Coding agents should start from [AGENTS.md](AGENTS.md). Translations live in `App/Bundle/Localization`.
+Coding agents should start from [AGENTS.md](AGENTS.md). Translations live in `App/Bundle/Localization`; fixes from native speakers are very welcome.
 
 ## Acknowledgements
 

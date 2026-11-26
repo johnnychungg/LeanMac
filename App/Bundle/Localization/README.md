@@ -8,7 +8,7 @@ Localization/<code>.lproj/Localizable.strings   UI text (key = English text)
 Localization/<code>.lproj/InfoPlist.strings      macOS permission prompts
 ```
 
-To add a language (for example `fr`):
+Shipped languages: `vi`, `ja`, `zh-Hans`, `ko`, `es` (English is the source). To add a language (for example `fr`):
 
 1. Copy `vi.lproj` to `fr.lproj` and translate the right-hand side of every `"key" = "value";` line.
 2. Add `case fr` (and its native `displayName`) to `AppLanguage` in `Sources/LeanDomain/Localization/Localization.swift`.
