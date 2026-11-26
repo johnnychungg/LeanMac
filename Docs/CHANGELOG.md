@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.2 - 2026-11-26
+
+- README: add Monitor and Displays screenshots; debug hook for the hardware sub-tab
+- README: describe the app, add screenshots, install and trust sections
+- Updates card: give the buttons their own row so messages are not squeezed
+
 ## 1.1.0 - 2026-11-26
 
 - Fan row: say the fans are stopped instead of showing 0 rpm
