@@ -30,9 +30,9 @@ struct UpdateSettingsCard: View {
                     Spacer(minLength: 0)
                     if updates.isAvailableInThisBuild, !hasWideButtons { actionButtons }
                 }
-                // Messages with two buttons would squeeze the text, so the buttons get their own row.
+                // A long error message would be squeezed by two buttons, so they go under the text, aligned with it.
                 if updates.isAvailableInThisBuild, hasWideButtons {
-                    HStack(spacing: 8) { Spacer(minLength: 0); actionButtons }
+                    HStack(spacing: 8) { actionButtons; Spacer(minLength: 0) }.padding(.leading, 44)
                 }
                 if updates.isAvailableInThisBuild {
                     JDivider()
@@ -46,7 +46,7 @@ struct UpdateSettingsCard: View {
 
     private var hasWideButtons: Bool {
         switch updates.state {
-        case .failed, .available: return true
+        case .failed: return true
         default: return false
         }
     }
