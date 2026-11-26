@@ -19,7 +19,9 @@ Charge limit, window snapping, a better ⌘Tab, live system stats, screenshots a
 
 <br>
 
-<img src="Docs/images/overview.png" alt="LeanMac popover: battery, system stats and displays" width="340">
+<img src="Docs/images/overview.png" alt="Overview: battery, system stats and displays" width="260">&nbsp;
+<img src="Docs/images/tools.png" alt="Tools: keep awake, window snapping, switcher, screenshots" width="260">&nbsp;
+<img src="Docs/images/monitor.png" alt="Monitor: CPU, RAM, GPU, battery, SSD, fan and network" width="260">
 
 </div>
 
@@ -34,70 +36,30 @@ are very welcome.
 
 ## Features
 
-<table>
-<tr>
-<td width="50%" valign="top">
-
 ### 🔋 Battery
 - **Charge limit** (70 / 80 / 90 %): holds the battery at your limit and runs the Mac straight from AC, so a Mac that stays plugged in stops wearing the cell.
 - **Temporary 100 % top-up** for the days you need a full battery, then it locks again by itself.
-- **Battery calibration** on demand or periodically.
+- **Battery calibration**, on demand or periodically.
 - Health, cycle count, battery temperature, adapter wattage and time remaining.
 - Alerts when the battery runs hot, or drops below 20 % with an external display connected.
 - A **safety watchdog**: if LeanMac is killed, the helper releases the lock by itself after about 30 seconds.
 
-</td>
-<td width="50%" valign="top">
-
-<img src="Docs/images/hardware.png" alt="Hardware tab with the charge limit" width="300">
-
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
-<img src="Docs/images/tools.png" alt="Tools tab with keep awake, snapping and the switcher" width="300">
-
-</td>
-<td width="50%" valign="top">
-
 ### 🧰 Tools
 - **Window snapping** with the keyboard, and moving windows between displays.
 - **Window switcher** on ⌘Tab: several rows with live thumbnails, with the option to show only windows on the current display.
-- **Keep awake** for 15 minutes up to infinite, plus a **Reduce effects** mode that turns off animations to save battery and heat.
+- **Keep awake** from 15 minutes to infinite, and a **Reduce effects** mode that turns off animations to save battery and heat.
 - **Annotated screenshots** (⇧⌘1) and a Capture now button.
 - **Finder cut and paste** (⌘X, ⌘V), which Finder never had.
 - **Sleep Guard**: turns Bluetooth off when the lid closes and restores it on wake, so a sleeping Mac does not wake itself.
 - **Startup items and processes**: switch off login items, and see which apps use the most energy.
 
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
 ### 📊 Monitor
 - CPU, RAM, GPU and temperature, each as its **own item in the menu bar** (pin only the ones you want).
-- Disk, network, **fan speed** and per-sensor temperature in the Monitor tab.
-- Fans are shown **read-only**. LeanMac never controls them.
+- Disk, network, **fan speed** and per-sensor temperature in the Monitor tab. Fans are shown **read-only**; LeanMac never controls them.
 
 ### 🖥️ Displays
-- Brightness, resolution and refresh rate for each connected display.
-- Brightness keys (F1 / F2) act on the display under the cursor.
-
-</td>
-<td width="50%" valign="top">
-
-<img src="Docs/images/cleaner.png" alt="Cleaner tab with reclaimable space" width="300">
-
-</td>
-</tr>
-</table>
-
-<div align="center">
-<img src="Docs/images/monitor.png" alt="Monitor tab: CPU, RAM, GPU, battery, SSD, fan and network" width="320">
-&nbsp;&nbsp;
-<img src="Docs/images/displays.png" alt="Displays tab: brightness, resolution and refresh rate per display" width="320">
-</div>
+- Brightness, resolution and refresh rate for each connected display. F1 / F2 act on the display under the cursor.
+- **Display tuning**: compares your displays by UI points per inch, matches them to the built-in screen, picks each display's best refresh rate and tells you which modes macOS resizes. Changes are applied only after you confirm, and go back by themselves after 15 seconds.
 
 ### 🧹 Cleaner
 - **Junk**: app caches, logs and crash reports, Trash and Xcode DerivedData, listed with sizes. Folders macOS owns are hidden instead of being shown locked.
@@ -110,8 +72,7 @@ are very welcome.
 - **Six interface languages** with a dropdown: English, Tiếng Việt, 日本語, 简体中文, 한국어 and Español, plus light, dark and automatic appearance.
 - Small and quiet: it pauses sampling and background timers when the Mac sleeps.
 
-**Deliberately left out** because they are risky or easy to get wrong: fan control, process freezing, virtual displays,
-clipboard history, mouse chords, hiding menu bar icons, disk speed tests.
+**Deliberately left out** because they are risky or easy to get wrong: fan control, process freezing, virtual displays, clipboard history, mouse chords, hiding menu bar icons, disk speed tests.
 
 ## Install
 
