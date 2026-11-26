@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.7 - 2026-11-26
+
+- Display tuning (Hardware > Displays): matches the UI size on every display to the built-in screen, picks each display's best refresh rate, and applies the result only after you confirm, with an automatic revert after 15 seconds.
+- Appearance: Auto now switches at once, and the header logo follows Light and Dark.
+- Updates: the card shows the version only, and its buttons no longer squeeze the message.
+- Charge-locked notice: shown once per lock instead of on every launch.
+- Monitor: the network row is labelled "Network".
+- The popover no longer shows its arrow.
+
 ## 1.1.0 - 2026-11-26
 
 - Fan row: say the fans are stopped instead of showing 0 rpm
