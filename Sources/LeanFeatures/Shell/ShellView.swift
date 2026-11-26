@@ -84,19 +84,7 @@ struct HeaderBar: View {
 
             Spacer(minLength: 4)
 
-            if thermalManager.cpuAvgTemp > 0 {
-                Button {
-                    UIState.shared.settingsOpen = false
-                    ui.selectedMainTab = FeatureRegistry.index(of: "hardware")
-                    UIState.shared.hardwareSub = 2
-                } label: {
-                    JStatusChip(text: String(format: "%.0f°C", thermalManager.displayTemp), icon: "thermometer.medium")
-                }
-                .buttonStyle(.plain)
-                .help(tr("Open thermals"))
-            }
-
-            JStatusChip(text: statusText, icon: statusIcon, kind: statusKind)
+            JStatusChip(text: statusText, icon: statusIcon, kind: statusKind).fixedSize()
 
             Button { withAnimation(.easeOut(duration: 0.15)) { UIState.shared.settingsOpen.toggle() } } label: {
                 Image(systemName: "gearshape")
