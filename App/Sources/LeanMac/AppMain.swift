@@ -57,6 +57,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         pop.contentSize = NSSize(width: 380, height: 570)
         pop.behavior = .transient
         pop.delegate = self
+        // Hide the little arrow that points at the menu bar icon. It is a private NSPopover property, so ask first:
+        // if a future macOS drops it, the arrow simply stays.
+        if pop.responds(to: NSSelectorFromString("setShouldHideAnchor:")) { pop.setValue(true, forKey: "shouldHideAnchor") }
         self.popover = pop
         AppearanceManager.shared.popover = pop
         AppearanceManager.shared.apply()

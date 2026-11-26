@@ -57,6 +57,7 @@ struct DisplaysSection: View {
             ForEach(displayManager.monitors) { monitor in
                 DisplayCard(monitor: monitor, displayManager: displayManager)
             }
+            DisplayCheckCard(displayManager: displayManager)
         }
     }
 }

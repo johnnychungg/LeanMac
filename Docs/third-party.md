@@ -16,4 +16,5 @@ use fails soft (the feature turns off, the app keeps running):
 - IOBluetooth power-state functions (Bluetooth off while the lid is closed).
 - `_AXUIElementGetWindow` (map an accessibility window to a window ID for the ⌘Tab switcher).
 - `CGWindowListCreateImage` through `dlsym` (window thumbnails and screenshots, with ScreenCaptureKit as a fallback).
+- `NSPopover.shouldHideAnchor` (hides the arrow of the menu bar popover; checked with `responds(to:)` first).
 - AppleSMC keys `CHTE`, `CH0B`, `CHIE`, `BCLM`, `bfF0` and the temperature sensor keys, read through IOKit.

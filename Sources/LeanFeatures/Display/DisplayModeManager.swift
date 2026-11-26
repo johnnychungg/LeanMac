@@ -12,11 +12,123 @@ final class DisplayModeManager: ObservableObject {
     @Published private(set) var errors: [CGDirectDisplayID: String] = [:]
     @Published private(set) var previous: [CGDirectDisplayID: DisplayModeOption] = [:]
     @Published private(set) var applyingDisplay: CGDirectDisplayID?
+    /// Result of the last display check (empty until the user runs it).
+    @Published private(set) var verdicts: [DisplayVerdict] = []
+    @Published private(set) var checkRan = false
+    /// Set while a batch of changes waits for the user to keep it; it is reverted when the countdown ends.
+    @Published private(set) var pendingRevert: PendingRevert?
+    @Published private(set) var batchError: String?
+    private var countdown: Task<Void, Never>?
+    private var terminateObserver: NSObjectProtocol?
+    /// Seconds the user has to confirm; a screen that became unreadable still goes back by itself.
+    static let confirmSeconds = 15
+
+    struct PendingRevert: Equatable {
+        let originals: [CGDirectDisplayID: DisplayModeOption]
+        var secondsLeft: Int
+    }
     private let backend: any DisplayModeBackend
     private let queue = DispatchQueue(label: "com.jmac.display-modes", qos: .userInitiated)
     private var connectedIDs: Set<CGDirectDisplayID> = []
 
-    init(backend: any DisplayModeBackend = CoreGraphicsDisplayModeBackend()) { self.backend = backend }
+    init(backend: any DisplayModeBackend = CoreGraphicsDisplayModeBackend()) {
+        self.backend = backend
+        // Never leave an unconfirmed change behind when the app quits.
+        terminateObserver = NotificationCenter.default.addObserver(
+            forName: NSApplication.willTerminateNotification, object: nil, queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated { self?.revertNow(wait: true) }
+        }
+    }
+
+    // MARK: - Display check (recommend, apply with automatic revert)
+
+    func runCheck(names: [CGDirectDisplayID: (name: String, isBuiltIn: Bool)]) {
+        let inputs: [DisplayCheckInput] = connectedIDs.sorted().compactMap { id in
+            guard let catalog = catalogs[id] else { return nil }
+            let size = CGDisplayScreenSize(id)
+            return DisplayCheckInput(id: id, name: names[id]?.name ?? tr("Display"), isBuiltIn: names[id]?.isBuiltIn ?? (CGDisplayIsBuiltin(id) != 0),
+                                     widthMM: size.width.isFinite ? Double(size.width) : 0, catalog: catalog)
+        }
+        verdicts = DisplayCheck.evaluate(inputs)
+        checkRan = true
+        batchError = nil
+    }
+
+    var recommendedChanges: [DisplayVerdict] { verdicts.filter { $0.recommended != nil } }
+
+    /// Applies every recommendation, then asks the user to keep it. Any failure puts everything back.
+    func applyRecommendations() {
+        guard pendingRevert == nil, applyingDisplay == nil else { return }
+        let changes = recommendedChanges.compactMap { v -> (CGDirectDisplayID, DisplayModeOption, DisplayModeOption)? in
+            guard let new = v.recommended, let old = catalogs[v.id]?.current else { return nil }
+            return (v.id, old, new)
+        }
+        guard !changes.isEmpty else { return }
+        batchError = nil
+        applyingDisplay = changes[0].0
+        let backend = self.backend
+        queue.async { [weak self] in
+            var applied: [(CGDirectDisplayID, DisplayModeOption)] = []
+            var failure: CGError = .success
+            for (id, old, new) in changes {
+                let r = backend.apply(new, to: id)
+                if r == .success { applied.append((id, old)) } else { failure = r; break }
+            }
+            if failure != .success { for (id, old) in applied.reversed() { _ = backend.apply(old, to: id) } }
+            DispatchQueue.main.async {
+                guard let self else { return }
+                self.applyingDisplay = nil
+                self.refresh(displays: Array(self.connectedIDs))
+                if failure != .success {
+                    self.batchError = tr("Could not change a display (code \(failure.rawValue)). Everything was put back.")
+                    return
+                }
+                self.pendingRevert = PendingRevert(originals: Dictionary(uniqueKeysWithValues: applied), secondsLeft: Self.confirmSeconds)
+                self.runCheckAfterChange()
+                self.startCountdown()
+            }
+        }
+    }
+
+    private func runCheckAfterChange() {
+        verdicts = []
+        checkRan = false
+    }
+
+    private func startCountdown() {
+        countdown?.cancel()
+        countdown = Task { @MainActor [weak self] in
+            while let self, let left = self.pendingRevert?.secondsLeft, left > 0 {
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                if Task.isCancelled { return }
+                self.pendingRevert?.secondsLeft -= 1
+            }
+            if !Task.isCancelled { self?.revertNow() }
+        }
+    }
+
+    func keepChanges() {
+        countdown?.cancel(); countdown = nil
+        pendingRevert = nil
+    }
+
+    func revertNow(wait: Bool = false) {
+        countdown?.cancel(); countdown = nil
+        guard let pending = pendingRevert else { return }
+        pendingRevert = nil
+        let backend = self.backend
+        let work = { for (id, old) in pending.originals { _ = backend.apply(old, to: id) } }
+        if wait { work(); return }
+        applyingDisplay = pending.originals.keys.first
+        queue.async { [weak self] in
+            work()
+            DispatchQueue.main.async {
+                self?.applyingDisplay = nil
+                self?.refresh(displays: Array(self?.connectedIDs ?? []))
+            }
+        }
+    }
 
     func refresh(displays: [CGDirectDisplayID]) {
         connectedIDs = Set(displays)
