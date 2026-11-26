@@ -4,7 +4,7 @@
 |---|---|---|
 | `smc` tool | source: `ThirdParty/smc/`; prebuilt binary: `App/Bundle/Helper/smc` | From [smcFanControl](https://github.com/hholtmann/smcFanControl) (`smc-command`), by devnull (2006) and Michael Wilber (2013), GPL-2.0-or-later (redistributable under GPLv3). Binary SHA-256: `e3b4392c966dee700f3e1d6cc3812c0d487954c3d6d77b91f521a9590aadae44`. Provenance was checked by comparing strings, not by a reproducible build; see `ThirdParty/smc/README.md` and `Scripts/build-smc.sh`. |
 
-No Swift package dependencies. No network access at runtime.
+No Swift package dependencies (update signatures use Apple's CryptoKit). The only network use is the update check described in `Docs/adr/0004-update-check.md`.
 
 ## Private and undocumented system interfaces
 

@@ -4,7 +4,7 @@ import LeanDesignSystem
 import LeanDomain
 import LeanPlatform
 
-private func groupCard<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
+func groupCard<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
     VStack(spacing: 0) { content() }
         .padding(.horizontal, 12).padding(.vertical, 2)
         .frame(maxWidth: .infinity)
@@ -253,6 +253,7 @@ struct SettingsView: View {
     @ObservedObject private var language = LanguageManager.shared
     @ObservedObject private var appearance = AppearanceManager.shared
     @ObservedObject private var shortcuts = ShortcutManager.shared
+    @ObservedObject private var updates = UpdateManager.shared
     @State private var showKeys = false
 
     private func section(_ title: String) -> some View {
@@ -308,6 +309,9 @@ struct SettingsView: View {
                                    isOn: Binding(get: { login.isEnabled }, set: { login.setEnabled($0) }))
                             .padding(.vertical, 8)
                     }
+
+                    section(tr("Updates"))
+                    UpdateSettingsCard(updates: updates)
 
                     section(tr("Shortcuts"))
                     Button { withAnimation(.easeOut(duration: 0.15)) { showKeys.toggle() } } label: {

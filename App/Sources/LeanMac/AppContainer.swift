@@ -24,6 +24,12 @@ final class AppContainer {
         notifications = NotificationManager()
         Notifier.sender = notifications
 
+        let marketing = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.0.0"
+        UpdateServices.current = UpdateServices(
+            fetcher: URLSessionUpdateFetcher(), installer: BundleUpdateInstaller(),
+            currentVersion: SemanticVersion(marketing) ?? SemanticVersion(0, 0, 0),
+            isEnabled: !Self.isReadOnlyMode)   // contributor builds never update themselves
+
         if Self.isReadOnlyMode {
             appLog("Read-only mode (LEANMAC_DEV=1): hardware writes are disabled")
             BatteryServices.current = BatteryServices(

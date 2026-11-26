@@ -4,3 +4,7 @@ build/
 *.app
 *.xcuserstate
 .audit/
+dist/
+*.pem
+*.p12
+*.key

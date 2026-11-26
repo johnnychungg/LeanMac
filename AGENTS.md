@@ -7,7 +7,8 @@ Human-oriented docs: [README.md](README.md), [.github/CONTRIBUTING.md](.github/C
 ## Project overview
 - SwiftPM, `swift-tools-version: 5.9` (do not raise it), AppKit + SwiftUI, GPL-3.0-only, every source file has an SPDX header.
 - Bundle ID stays `com.local.jmac` so granted permissions are not lost. The app hides from the Dock (`LSUIElement`).
-- No network code and no auto-update (`Docs/adr/0002-no-network.md`).
+- The only network code is the update check (`Docs/adr/0004-update-check.md`); do not add other networking without a new ADR.
+  Releases: `Scripts/release.sh X.Y.Z` (see `Docs/releasing.md`); the version lives in `App/Bundle/Info.plist` only.
 
 ## Layout
 - `Sources/LeanDomain`: logic and ports. No AppKit, IOKit or `Process`.

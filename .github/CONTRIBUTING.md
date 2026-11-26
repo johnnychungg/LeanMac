@@ -29,7 +29,7 @@ Scripts/test-helper.sh
 
 ## Rules of the road
 - English for UI, logs, identifiers and new comments.
-- No network access and no auto-update (see `Docs/adr/0002-no-network.md`).
+- The only network code is the update check in `Sources/*/Update` (see `Docs/adr/0004-update-check.md`). Do not add other networking without a new ADR.
 - Anything that reaches the privileged helper or writes the SMC needs a code-owner review (see `.github/CODEOWNERS`). Changing `App/Bundle/Helper/leanmac-power` also means bumping its `HELPER_VERSION` and `PrivilegedHelper.requiredVersion` together.
 - Do not add to `Docs/architecture-allowlist.txt`; it may only shrink.
 

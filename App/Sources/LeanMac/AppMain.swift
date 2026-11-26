@@ -82,6 +82,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         }
         refreshMenuBarStatusItem()
 
+        // One update check shortly after launch (at most once a day); there is no repeating timer.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 45) { UpdateManager.shared.checkIfDue() }
+
         // Recover the Accessibility permission automatically if an update just invalidated it
         AccessibilityRecovery.handleLaunch()
 
@@ -157,6 +160,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         ThermalManager.shared.setPopoverVisible(true)
         SystemMonitorManager.shared.setPopoverVisible(true)
         DisplayManager.shared.checkAccessibility()
+        UpdateManager.shared.checkIfDue()
     }
 
     func popoverDidClose(_ notification: Notification) {

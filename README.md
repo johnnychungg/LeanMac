@@ -30,7 +30,9 @@ This is an early community release. Please read these before installing:
 - **Display modes** are applied permanently (no automatic revert). If a resolution or refresh rate leaves the screen unusable,
   switch back in System Settings > Displays (use the keyboard or another display if the screen is unreadable).
 - **Self-signed builds.** The app is not notarized. You build it yourself and sign it with a local identity.
-- No network access, no telemetry, no auto-update.
+- The only network use is an optional update check against GitHub (once a day, no identifiers, can be turned off). An update
+  is downloaded and installed only after you press Install, and only if it carries the maintainer's signature
+  ([ADR 0004](Docs/adr/0004-update-check.md)). No telemetry.
 
 ## Build
 ```bash
