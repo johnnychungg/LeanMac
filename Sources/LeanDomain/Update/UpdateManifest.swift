@@ -13,7 +13,7 @@ public enum UpdateConfig {
     public static let allowedHosts: Set<String> = ["github.com", "objects.githubusercontent.com", "release-assets.githubusercontent.com"]
     /// Base64 of the raw 32-byte Ed25519 public key (`Scripts/updater-keygen.sh` prints it).
     /// Empty = no key has been provisioned yet, and the updater stays switched off.
-    public static let publicKeyBase64 = ""
+    public static let publicKeyBase64 = "vRjR5siWJ3I2+mUcN1HtUS64pC10OuSnOCGfkWy6Nx8="
     public static let bundleIdentifier = "com.local.jmac"
     public static let maxManifestBytes = 64 * 1024
     public static let maxArchiveBytes = 100 * 1024 * 1024
