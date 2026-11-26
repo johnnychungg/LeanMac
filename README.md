@@ -45,13 +45,14 @@ are very welcome.
 - A **safety watchdog**: if LeanMac is killed, the helper releases the lock by itself after about 30 seconds.
 
 ### 🧰 Tools
-- **Window snapping** with the keyboard, and moving windows between displays.
-- **Window switcher** on ⌘Tab: several rows with live thumbnails, with the option to show only windows on the current display.
-- **Keep awake** from 15 minutes to infinite, and a **Reduce effects** mode that turns off animations to save battery and heat.
-- **Annotated screenshots** (⇧⌘1) and a Capture now button.
+- **Window snapping** with the keyboard: halves, corners, centre and maximize, plus **moving windows between displays**, either keeping the window size or scaling it to the destination display.
+- **Window switcher** on ⌘Tab: several rows with live thumbnails, grid navigation, quit or close from the switcher, and the option to show only windows on the current display.
+- **Annotated screenshots** (⇧⌘1): drag an area, draw with pen, highlighter and text, **pixelate** sensitive parts, then copy to the clipboard or save to Downloads/Screenshots.
 - **Finder cut and paste** (⌘X, ⌘V), which Finder never had.
-- **Sleep Guard**: turns Bluetooth off when the lid closes and restores it on wake, so a sleeping Mac does not wake itself.
+- **Keep awake** from 15 minutes to infinite, and a **Reduce effects** mode that turns off animations to save battery and heat.
+- **Sleep Guard**: turns Bluetooth off when the lid closes and restores it on wake, so a sleeping Mac does not wake itself, and shows a report of the last sleep.
 - **Startup items and processes**: switch off login items, and see which apps use the most energy.
+- **Customizable shortcuts**: change, add or disable any key combination, with warnings when one clashes with a macOS shortcut or another LeanMac action.
 
 ### 📊 Monitor
 - CPU, RAM, GPU and temperature, each as its **own item in the menu bar** (pin only the ones you want).
@@ -67,9 +68,15 @@ are very welcome.
 - **Large files**: finds what is eating your disk.
 - Everything is moved to the **Trash**, so a mistake can be undone.
 
+### 🌐 Languages
+The whole interface, notifications and macOS permission prompts are translated into **six languages**, picked from a dropdown in Settings:
+**English · Tiếng Việt · 日本語 · 简体中文 · 한국어 · Español**.
+On first launch LeanMac follows your macOS language; changing it in Settings applies instantly and is remembered. Translations are plain `.strings` files, so adding a language is a small pull request ([guide](App/Bundle/Localization/README.md)).
+
 ### ✨ And also
 - **Signed, user-confirmed updates.** LeanMac tells you when a new version exists. It downloads and installs only after you press Install, and only if the download carries the maintainer's signature.
-- **Six interface languages** with a dropdown: English, Tiếng Việt, 日本語, 简体中文, 한국어 and Español, plus light, dark and automatic appearance.
+- **Light, dark and automatic appearance**, and **launch at login**.
+- A **permissions hub** that shows which permissions are granted, why each is needed, and links to the right System Settings page.
 - Small and quiet: it pauses sampling and background timers when the Mac sleeps.
 
 **Deliberately left out** because they are risky or easy to get wrong: fan control, process freezing, virtual displays, clipboard history, mouse chords, hiding menu bar icons, disk speed tests.
