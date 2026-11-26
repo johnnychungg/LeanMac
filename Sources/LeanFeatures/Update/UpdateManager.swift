@@ -61,6 +61,7 @@ public final class UpdateManager: ObservableObject {
 
     public var isAvailableInThisBuild: Bool { services().isEnabled && !publicKey.isEmpty }
     public var currentVersion: String { services().currentVersion.description }
+    public var currentBuild: String { Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "?" }
     public var installBlocker: String? { services().installer.installBlocker() }
 
     // MARK: - Checking

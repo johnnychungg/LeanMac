@@ -9,7 +9,7 @@ struct UpdateSettingsCard: View {
 
     private var statusText: String {
         switch updates.state {
-        case .idle: return tr("Version \(updates.currentVersion)")
+        case .idle: return tr("Version \(updates.currentVersion) (build \(updates.currentBuild))")
         case .checking: return tr("Checking for updates…")
         case .upToDate: return tr("You are up to date (version \(updates.currentVersion)).")
         case .available(let m): return tr("Version \(m.version) is available.")
@@ -26,7 +26,7 @@ struct UpdateSettingsCard: View {
                 HStack(spacing: 10) {
                     JIcon(name: "arrow.down.circle")
                     VStack(alignment: .leading, spacing: 1) {
-                        Text("LeanMac").font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
+                        Text("LeanMac \(updates.currentVersion)").font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
                         Text(statusText).font(.system(size: 12)).foregroundStyle(Pal.ink3)
                             .fixedSize(horizontal: false, vertical: true)
                     }

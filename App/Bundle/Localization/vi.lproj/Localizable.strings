@@ -422,8 +422,8 @@
 "Update failed." = "Cập nhật thất bại.";
 "Updates" = "Cập nhật";
 "Updates are not set up in this build." = "Bản build này chưa được thiết lập cập nhật.";
-"Version %@" = "Phiên bản %@";
 "Version %@ is available." = "Đã có phiên bản %@.";
 "Version %@ is ready. Open LeanMac settings to install it." = "Phiên bản %@ đã sẵn sàng. Mở cài đặt LeanMac để cài.";
 "Version %@ needs a newer macOS." = "Phiên bản %@ cần macOS mới hơn.";
 "You are up to date (version %@)." = "Bạn đang dùng bản mới nhất (phiên bản %@).";
+"Version %@ (build %@)" = "Phiên bản %@ (bản dựng %@)";
