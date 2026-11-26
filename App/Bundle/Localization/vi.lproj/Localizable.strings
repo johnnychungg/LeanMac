@@ -423,7 +423,7 @@
 "Version %@ is ready. Open LeanMac settings to install it." = "Phiên bản %@ đã sẵn sàng. Mở cài đặt LeanMac để cài.";
 "Version %@ needs a newer macOS." = "Phiên bản %@ cần macOS mới hơn.";
 "You are up to date (version %@)." = "Bạn đang dùng bản mới nhất (phiên bản %@).";
-"Version %@ (build %@)" = "Phiên bản %@ (bản dựng %@)";
+"Version %@" = "Phiên bản %@";
 "Fan" = "Quạt";
 "No fan" = "Không có quạt";
 "Fan %@: %@–%@ rpm" = "Quạt %1$@: %2$@–%3$@ vòng/phút";

@@ -9,7 +9,7 @@ struct UpdateSettingsCard: View {
 
     private var statusText: String {
         switch updates.state {
-        case .idle: return tr("Version \(updates.currentVersion) (build \(updates.currentBuild))")
+        case .idle: return tr("Version \(updates.currentVersion)")
         case .checking: return tr("Checking for updates…")
         case .upToDate: return tr("You are up to date (version \(updates.currentVersion)).")
         case .available(let m): return tr("Version \(m.version) is available.")
