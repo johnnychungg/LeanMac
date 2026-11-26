@@ -77,8 +77,9 @@ struct HeaderBar: View {
                     .frame(width: 24, height: 24)
                     .background(RoundedRectangle(cornerRadius: 7, style: .continuous).fill(Pal.accentBg))
                 Text("LeanMac").font(.system(size: 14, weight: .medium)).foregroundStyle(Pal.ink)
+                    .lineLimit(1).fixedSize()
                 Text(UpdateManager.shared.currentVersion).font(.system(size: 11)).foregroundStyle(Pal.ink3)
-                    .padding(.top, 2)
+                    .lineLimit(1).fixedSize().padding(.top, 2)
             }
 
             Spacer(minLength: 4)
