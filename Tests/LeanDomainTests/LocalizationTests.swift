@@ -62,6 +62,8 @@ struct LocalizationTests {
         #expect(AppLanguage.allCases.contains(.en))
         #expect(AppLanguage.allCases.contains(.vi))
         #expect(AppLanguage.en.displayName == "English")
+        #expect(Set(AppLanguage.allCases.map(\.code)) == ["en", "vi", "ja", "zh-Hans", "ko", "es"])
+        #expect(AppLanguage.allCases.allSatisfy { !$0.displayName.isEmpty })
     }
 }
 
@@ -70,6 +72,13 @@ struct LanguageDefaultTests {
     @Test func followsSystemWhenSupported() {
         #expect(AppLanguage.systemDefault(preferred: ["vi-VN", "en-US"]) == .vi)
         #expect(AppLanguage.systemDefault(preferred: ["fr-FR", "vi"]) == .vi)
+    }
+    @Test func mapsNewLanguagesAndAnyChinese() {
+        #expect(AppLanguage.systemDefault(preferred: ["ja-JP"]) == .ja)
+        #expect(AppLanguage.systemDefault(preferred: ["ko-KR"]) == .ko)
+        #expect(AppLanguage.systemDefault(preferred: ["es-419"]) == .es)
+        #expect(AppLanguage.systemDefault(preferred: ["zh-Hans-CN"]) == .zhHans)
+        #expect(AppLanguage.systemDefault(preferred: ["zh-Hant-TW"]) == .zhHans)
     }
     @Test func fallsBackToEnglish() {
         #expect(AppLanguage.systemDefault(preferred: ["fr-FR"]) == .en)

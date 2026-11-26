@@ -1,0 +1,5 @@
+/* Simplified Chinese (zh-Hans) permission prompts. Keys match App/Bundle/Info.plist. */
+"NSBluetoothAlwaysUsageDescription" = "LeanMac 使用蓝牙在您合上盖子时自动断开连接（睡眠守护），以节省电量并防止 Mac 睡眠时发热。";
+"NSBluetoothPeripheralUsageDescription" = "LeanMac 在 Mac 进入睡眠时管理蓝牙电源以节省电量。";
+"NSScreenCaptureUsageDescription" = "LeanMac 需要屏幕录制权限，以便在 Alt+Tab 切换器中显示窗口预览。";
+"NSAppleEventsUsageDescription" = "LeanMac 使用 AppleEvents 来控制其他应用和显示器。";

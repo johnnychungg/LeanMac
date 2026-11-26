@@ -1,0 +1,5 @@
+/* Spanish (es) permission prompts. Keys match App/Bundle/Info.plist. */
+"NSBluetoothAlwaysUsageDescription" = "LeanMac usa Bluetooth para desconectar dispositivos al cerrar la tapa (Sleep Guard), lo que ahorra batería y evita que el Mac se caliente mientras está suspendido.";
+"NSBluetoothPeripheralUsageDescription" = "LeanMac gestiona la alimentación del Bluetooth cuando el Mac se suspende para ahorrar batería.";
+"NSScreenCaptureUsageDescription" = "LeanMac necesita permiso de Grabación de pantalla para mostrar vistas previas de las ventanas en el selector Alt+Tab.";
+"NSAppleEventsUsageDescription" = "LeanMac usa AppleEvents para controlar otras apps y pantallas.";

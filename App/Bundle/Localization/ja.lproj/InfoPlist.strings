@@ -1,0 +1,5 @@
+/* Japanese (ja) permission prompts. Keys match App/Bundle/Info.plist. */
+"NSBluetoothAlwaysUsageDescription" = "LeanMac は蓋を閉じたときに Bluetooth の接続を自動で切断します（スリープガード）。スリープ中のバッテリー消耗と発熱を抑えます。";
+"NSBluetoothPeripheralUsageDescription" = "LeanMac は Mac がスリープするときに Bluetooth の電源を管理してバッテリーを節約します。";
+"NSScreenCaptureUsageDescription" = "LeanMac は Alt+Tab スイッチャーでウインドウのプレビューを表示するために画面収録の権限が必要です。";
+"NSAppleEventsUsageDescription" = "LeanMac は AppleEvents を使って他のアプリやディスプレイを制御します。";

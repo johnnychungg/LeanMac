@@ -1,0 +1,5 @@
+/* Korean (ko) permission prompts. Keys match App/Bundle/Info.plist. */
+"NSBluetoothAlwaysUsageDescription" = "LeanMac은 덮개를 닫으면 블루투스 연결을 자동으로 해제합니다(슬립 가드). 잠자기 중 배터리 소모와 발열을 줄여 줍니다.";
+"NSBluetoothPeripheralUsageDescription" = "LeanMac은 Mac이 잠자기에 들어갈 때 블루투스 전원을 관리하여 배터리를 절약합니다.";
+"NSScreenCaptureUsageDescription" = "LeanMac은 Alt+Tab 전환기에서 윈도우 미리보기를 표시하기 위해 화면 기록 권한이 필요합니다.";
+"NSAppleEventsUsageDescription" = "LeanMac은 AppleEvents를 사용하여 다른 앱과 디스플레이를 제어합니다.";

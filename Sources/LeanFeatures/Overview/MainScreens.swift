@@ -287,11 +287,20 @@ struct SettingsView: View {
                             JIcon(name: "globe")
                             Text(tr("Language")).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
                             Spacer()
-                            JSegmented(items: ["VI", "EN"], selection: Binding(
-                                get: { language.currentLanguage == .vi ? 0 : 1 },
-                                set: { language.switchLanguage(to: $0 == 0 ? .vi : .en) }
-                            ))
-                            .frame(width: 120)
+                            Menu {
+                                ForEach(AppLanguage.allCases) { option in
+                                    Button { language.switchLanguage(to: option) } label: {
+                                        if option == language.currentLanguage {
+                                            Label(option.displayName, systemImage: "checkmark")
+                                        } else { Text(option.displayName) }
+                                    }
+                                }
+                            } label: {
+                                Text(language.currentLanguage.displayName).font(.system(size: 12, weight: .medium)).lineLimit(1)
+                            }
+                            .menuStyle(.borderlessButton)
+                            .fixedSize()
+                            .accessibilityLabel(tr("Language"))
                         }
                         .padding(.vertical, 8)
                         JDivider()

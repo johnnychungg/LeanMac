@@ -9,14 +9,21 @@ import Combine
 public enum AppLanguage: String, CaseIterable, Identifiable, Sendable {
     case en
     case vi
+    case ja
+    case zhHans = "zh-Hans"
+    case ko
+    case es
 
     public var id: String { rawValue }
+    /// The `<code>.lproj` folder name.
     public var code: String { rawValue }
 
     /// First-run default: the first system-preferred language we translate, otherwise English.
+    /// Any Chinese setting maps to Simplified Chinese, the only Chinese translation.
     public static func systemDefault(preferred: [String] = Locale.preferredLanguages) -> AppLanguage {
         for tag in preferred {
             let base = tag.split(separator: "-").first.map(String.init) ?? tag
+            if base == "zh" { return .zhHans }
             if let match = AppLanguage(rawValue: base) { return match }
         }
         return .en
@@ -27,6 +34,10 @@ public enum AppLanguage: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .en: return "English"
         case .vi: return "Tiếng Việt"
+        case .ja: return "日本語"
+        case .zhHans: return "简体中文"
+        case .ko: return "한국어"
+        case .es: return "Español"
         }
     }
 }
@@ -168,7 +179,7 @@ public final class LanguageManager: ObservableObject {
 
     private init() {
         let saved = UserDefaults.standard.string(forKey: storageKey).flatMap(AppLanguage.init(rawValue:))
-        // First run follows the system language (en or vi); a user choice is remembered.
+        // First run follows the system language when it is translated; a user choice is remembered.
         let language = saved ?? AppLanguage.systemDefault()
         currentLanguage = language
         L10n.setLanguage(language)
