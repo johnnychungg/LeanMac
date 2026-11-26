@@ -4,7 +4,7 @@ import CoreGraphics
 import LeanDesignSystem
 import LeanDomain
 
-/// "Display check": matches the UI size of every display to the built-in screen, picks each display's best refresh
+/// "Display tuning": matches the UI size of every display to the built-in screen, picks each display's best refresh
 /// rate, and applies the result only after confirmation, with an automatic revert.
 struct DisplayCheckCard: View {
     @ObservedObject var displayManager: DisplayManager
@@ -33,7 +33,7 @@ struct DisplayCheckCard: View {
                 HStack(spacing: 10) {
                     JIcon(name: "checkmark.seal")
                     VStack(alignment: .leading, spacing: 1) {
-                        Text(tr("Display check")).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
+                        Text(tr("Display tuning")).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
                         Text(summary).font(.system(size: 12))
                             .foregroundStyle(modes.checkRan && modes.recommendedChanges.isEmpty ? Pal.ok : Pal.ink3)
                     }
@@ -75,7 +75,7 @@ struct DisplayCheckCard: View {
                 Text(error).font(.system(size: 12)).foregroundStyle(Pal.warn).fixedSize(horizontal: false, vertical: true)
             }
             HStack(spacing: 8) {
-                JChip(text: modes.checkRan ? tr("Check again") : tr("Check displays"), selected: !modes.checkRan) {
+                JChip(text: modes.checkRan ? tr("Analyze again") : tr("Analyze displays"), selected: !modes.checkRan) {
                     modes.refresh(displays: displayManager.monitors.filter(\.isConnected).map(\.id))
                     modes.runCheck(names: Dictionary(uniqueKeysWithValues: displayManager.monitors.map { ($0.id, ($0.name, $0.isBuiltIn)) }))
                 }

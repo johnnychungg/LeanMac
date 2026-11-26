@@ -432,14 +432,14 @@
 "LeanMac helper needs an update" = "Helper của LeanMac cần cập nhật";
 "Open LeanMac to update the charge-limit helper." = "Mở LeanMac để cập nhật helper giới hạn sạc.";
 "Idle, fans stopped" = "Đang nghỉ, quạt không quay";
-"Display check" = "Kiểm tra màn hình";
+"Display tuning" = "Hiệu chỉnh màn hình";
 "Keep these display settings?" = "Giữ các cài đặt màn hình này?";
 "Going back automatically in %@ s if you do nothing." = "Tự quay lại sau %@ giây nếu không có thao tác nào.";
 "Keep" = "Giữ";
 "Go back now" = "Quay lại ngay";
 "Colors and brightness are not changed: matching them needs a hardware calibrator." = "Màu và độ sáng không bị đổi: muốn khớp chúng cần máy đo màu chuyên dụng.";
-"Check again" = "Kiểm tra lại";
-"Check displays" = "Kiểm tra màn hình";
+"Analyze again" = "Phân tích lại";
+"Analyze displays" = "Phân tích màn hình";
 "Apply %@ changes" = "Áp dụng %@ thay đổi";
 "Skipped" = "Bỏ qua";
 "Mirrored displays share one mode, or macOS does not report the size." = "Màn hình mirror dùng chung một mode, hoặc macOS không báo kích thước.";
