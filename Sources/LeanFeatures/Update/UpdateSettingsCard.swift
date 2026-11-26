@@ -27,8 +27,12 @@ struct UpdateSettingsCard: View {
                     JIcon(name: "arrow.down.circle")
                     Text(statusText).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
                         .fixedSize(horizontal: false, vertical: true)
-                    Spacer()
-                    if updates.isAvailableInThisBuild { actionButtons }
+                    Spacer(minLength: 0)
+                    if updates.isAvailableInThisBuild, !hasWideButtons { actionButtons }
+                }
+                // Messages with two buttons would squeeze the text, so the buttons get their own row.
+                if updates.isAvailableInThisBuild, hasWideButtons {
+                    HStack(spacing: 8) { Spacer(minLength: 0); actionButtons }
                 }
                 if updates.isAvailableInThisBuild {
                     JDivider()
@@ -37,6 +41,13 @@ struct UpdateSettingsCard: View {
                 }
             }
             .padding(.vertical, 8)
+        }
+    }
+
+    private var hasWideButtons: Bool {
+        switch updates.state {
+        case .failed, .available: return true
+        default: return false
         }
     }
 
