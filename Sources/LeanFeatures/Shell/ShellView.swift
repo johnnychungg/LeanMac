@@ -84,8 +84,6 @@ struct HeaderBar: View {
 
             Spacer(minLength: 4)
 
-            JStatusChip(text: statusText, icon: statusIcon, kind: statusKind).fixedSize()
-
             Button { withAnimation(.easeOut(duration: 0.15)) { UIState.shared.settingsOpen.toggle() } } label: {
                 Image(systemName: "gearshape")
                     .font(.system(size: 14, weight: .medium))
@@ -107,24 +105,6 @@ struct HeaderBar: View {
         .padding(.horizontal, 14)
         .padding(.top, 12)
         .padding(.bottom, 8)
-    }
-
-    private var isLocked: Bool {
-        batteryManager.isProtectionEnabled && batteryManager.isBypassActive && batteryManager.isPluggedIn
-    }
-    private var statusText: String {
-        isLocked ? tr("Lock \(batteryManager.chargeLimit)%") : "\(batteryManager.currentLevel)%"
-    }
-    private var statusIcon: String {
-        if isLocked { return "lock.shield" }
-        if batteryManager.isCharging { return "bolt.fill" }
-        if batteryManager.isPluggedIn { return "powerplug" }
-        return "battery.50"
-    }
-    private var statusKind: JStatusChip.Kind {
-        if isLocked { return .ok }
-        if !batteryManager.isPluggedIn && batteryManager.currentLevel <= 20 { return .warn }
-        return .neutral
     }
 }
 
