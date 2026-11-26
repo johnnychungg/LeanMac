@@ -62,6 +62,7 @@ public struct MainView: View {
 // MARK: - Header
 
 struct HeaderBar: View {
+    @ObservedObject private var appearance = AppearanceManager.shared
     @ObservedObject private var ui = UIState.shared
     @ObservedObject var batteryManager: BatteryManager
     @ObservedObject var thermalManager: ThermalManager
@@ -72,7 +73,7 @@ struct HeaderBar: View {
         HStack(spacing: 8) {
             HStack(spacing: 8) {
                 // Same colored logo as the menu bar (the L follows the light/dark text color, the leaf stays mint).
-                Image(nsImage: LeanLogo.menuBarImage(size: 24))
+                Image(nsImage: LeanLogo.menuBarImage(size: 24, ink: appearance.resolvedScheme == .dark ? NSColor(white: 0.94, alpha: 1) : NSColor(white: 0.09, alpha: 1)))
                     .resizable()
                     .frame(width: 24, height: 24)
                     .background(RoundedRectangle(cornerRadius: 7, style: .continuous).fill(Pal.accentBg))

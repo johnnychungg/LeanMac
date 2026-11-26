@@ -425,12 +425,34 @@ package final class AppearanceManager: ObservableObject {
         }
     }
 
-    package var colorScheme: ColorScheme? { mode == 1 ? .light : (mode == 2 ? .dark : nil) }
+    /// The scheme the UI really uses right now. It is always concrete (never nil): a SwiftUI `preferredColorScheme(nil)`
+    /// does not reliably return to the system look after Light/Dark, which made Auto need a second click.
+    @Published package private(set) var resolvedScheme: ColorScheme = .light
+    package var colorScheme: ColorScheme? { resolvedScheme }
+    private var systemObserver: NSKeyValueObservation?
 
     package func apply() {
         NSApp.appearance = appearance
         popover?.appearance = appearance
         popover?.contentViewController?.view.appearance = appearance
+        resolve()
+        if systemObserver == nil {
+            // Follow macOS while in Auto mode.
+            systemObserver = NSApp.observe(\.effectiveAppearance, options: [.new]) { [weak self] _, _ in
+                Task { @MainActor in self?.resolve() }
+            }
+        }
+    }
+
+    private func resolve() {
+        let scheme: ColorScheme
+        switch mode {
+        case 1: scheme = .light
+        case 2: scheme = .dark
+        default:
+            scheme = NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua ? .dark : .light
+        }
+        if scheme != resolvedScheme { resolvedScheme = scheme }
     }
 }
 
@@ -460,12 +482,12 @@ package struct LeanGlyph: Shape {
 package enum LeanLogo {
     /// Colored menu bar image: the L body follows the system text color (light/dark), the leaf is mint green.
     /// macOS redraws the drawing handler for the current appearance, so the colors are always right.
-    package static func menuBarImage(size: CGFloat = 18) -> NSImage {
+    package static func menuBarImage(size: CGFloat = 18, ink: NSColor = .labelColor) -> NSImage {
         let img = NSImage(size: NSSize(width: size, height: size), flipped: false) { rect in
             let s = rect.width
             func P(_ x: CGFloat, _ y: CGFloat) -> NSPoint { NSPoint(x: x * s, y: y * s) }
             let w: CGFloat = 0.22
-            NSColor.labelColor.setFill()
+            ink.setFill()
             NSBezierPath(roundedRect: NSRect(x: 0.16 * s, y: 0.10 * s, width: w * s, height: 0.82 * s),
                          xRadius: w * s / 2, yRadius: w * s / 2).fill()
             let leaf = NSBezierPath()
@@ -476,7 +498,7 @@ package enum LeanLogo {
             NSColor(srgbRed: 0.18, green: 0.85, blue: 0.62, alpha: 1).setFill()
             leaf.fill()
             // Redraw the body over the leaf base so the L has a continuous stroke
-            NSColor.labelColor.setFill()
+            ink.setFill()
             NSBezierPath(roundedRect: NSRect(x: 0.16 * s, y: 0.10 * s, width: w * s, height: 0.82 * s),
                          xRadius: w * s / 2, yRadius: w * s / 2).fill()
             return true
