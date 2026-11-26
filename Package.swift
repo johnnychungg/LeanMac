@@ -11,7 +11,7 @@
 //                     (+ LeanPlatform in the files listed in Docs/architecture-allowlist.txt)
 //   LeanMac           Composition root: builds the services, wires the features, owns the menu bar.
 //
-// See ARCHITECTURE.md.
+// See Docs/ARCHITECTURE.md.
 import PackageDescription
 
 let package = Package(

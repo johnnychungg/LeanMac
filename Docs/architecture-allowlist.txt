@@ -1,7 +1,7 @@
 # Known architecture debt. SPDX-License-Identifier: GPL-3.0-only
 #
 # Scripts/check-architecture.sh fails when a file breaks a rule and is NOT listed here.
-# Entries may only be removed, never added, without a maintainer's review (see CODEOWNERS).
+# Entries may only be removed, never added, without a maintainer's review (see .github/CODEOWNERS).
 # Format:  <rule>  <path>   # why
 #
 # Rules:

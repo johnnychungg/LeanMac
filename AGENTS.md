@@ -2,7 +2,7 @@
 
 Instructions for coding agents (and humans) working on LeanMac, a pure-Swift menu bar app for macOS 14+.
 This file stays at the repository root because agent tools look for it there. `CLAUDE.md` only imports it.
-Human-oriented docs: [README.md](README.md), [CONTRIBUTING.md](CONTRIBUTING.md), [ARCHITECTURE.md](ARCHITECTURE.md), [SECURITY.md](SECURITY.md).
+Human-oriented docs: [README.md](README.md), [Docs/CONTRIBUTING.md](Docs/CONTRIBUTING.md), [Docs/ARCHITECTURE.md](Docs/ARCHITECTURE.md), [Docs/SECURITY.md](Docs/SECURITY.md).
 
 ## Project overview
 - SwiftPM, `swift-tools-version: 5.9` (do not raise it), AppKit + SwiftUI, GPL-3.0-only, every source file has an SPDX header.
@@ -53,4 +53,4 @@ Scripts/test-helper.sh
 
 ## Commits and pull requests
 - Small, focused changes with a clear message. Do not commit build output, `.audit/`, keys or certificates.
-- Anything touching the helper, the SMC or the installer needs a review from the code owner (`CODEOWNERS`).
+- Anything touching the helper, the SMC or the installer needs a review from the code owner (`.github/CODEOWNERS`).

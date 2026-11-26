@@ -1,7 +1,7 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-3.0-only
 #
-# Fails when the layering rules in ARCHITECTURE.md are broken. Run it before every pull request:
+# Fails when the layering rules in Docs/ARCHITECTURE.md are broken. Run it before every pull request:
 #   Scripts/check-architecture.sh
 set -u
 cd "$(dirname "$0")/.."
