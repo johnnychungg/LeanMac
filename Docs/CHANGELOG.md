@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 - 2026-11-27
+
+- Refresh LeanMac interface and improve display and cleanup workflows
+- Tools: warn when another app holds Secure Input and blocks shortcuts, with a Quit button
+- README: soften the permissions hub description
+- README: current screenshots, fuller feature list, languages section
+- README: three demo screenshots at the top, text-only feature list
+
 All notable changes to LeanMac. Versions follow [Semantic Versioning](https://semver.org); every release is signed, see [releasing.md](releasing.md).
 
 ## 1.1.8 - 2026-11-26
