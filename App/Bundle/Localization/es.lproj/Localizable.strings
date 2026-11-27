@@ -455,3 +455,4 @@
 "Panel limit" = "Límite del panel";
 "Reference" = "Referencia";
 "Waiting for your confirmation" = "Esperando tu confirmación";
+"%@ is blocking keyboard shortcuts (Secure Input). Quit it to restore them." = "%@ está bloqueando los atajos de teclado (Secure Input). Ciérrala para restaurarlos.";

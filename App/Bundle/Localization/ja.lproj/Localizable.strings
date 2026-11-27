@@ -455,3 +455,4 @@
 "Panel limit" = "パネルの限界";
 "Reference" = "基準";
 "Waiting for your confirmation" = "確認待ち";
+"%@ is blocking keyboard shortcuts (Secure Input). Quit it to restore them." = "%@ がキーボードショートカットをブロックしています（Secure Input）。終了すると元に戻ります。";

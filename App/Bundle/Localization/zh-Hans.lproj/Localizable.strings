@@ -455,3 +455,4 @@
 "Panel limit" = "面板限制";
 "Reference" = "基准";
 "Waiting for your confirmation" = "等待您确认";
+"%@ is blocking keyboard shortcuts (Secure Input). Quit it to restore them." = "%@ 正在阻止键盘快捷键（Secure Input）。退出它即可恢复。";

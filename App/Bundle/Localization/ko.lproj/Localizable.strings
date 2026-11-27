@@ -455,3 +455,4 @@
 "Panel limit" = "패널 한계";
 "Reference" = "기준";
 "Waiting for your confirmation" = "확인 대기 중";
+"%@ is blocking keyboard shortcuts (Secure Input). Quit it to restore them." = "%@ 이(가) 키보드 단축키를 막고 있습니다(Secure Input). 종료하면 복구됩니다.";

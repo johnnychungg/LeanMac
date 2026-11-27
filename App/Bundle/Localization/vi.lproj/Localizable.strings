@@ -458,3 +458,4 @@
 "Panel limit" = "Giới hạn panel";
 "Reference" = "Chuẩn";
 "Waiting for your confirmation" = "Đang chờ xác nhận";
+"%@ is blocking keyboard shortcuts (Secure Input). Quit it to restore them." = "%@ đang chặn phím tắt (Secure Input). Thoát nó để phím tắt hoạt động lại.";

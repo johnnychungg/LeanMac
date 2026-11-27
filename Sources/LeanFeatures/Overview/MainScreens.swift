@@ -169,6 +169,7 @@ struct ToolsTabView: View {
     @ObservedObject private var shortcuts = ShortcutManager.shared
     @ObservedObject private var caffeine = CaffeinateManager.shared
     @ObservedObject private var ui = UIState.shared
+    @ObservedObject private var secureInput = SecureInputWatcher.shared
 
     var body: some View {
         TabScaffold(subItems: [tr("Utilities"), tr("Startup"), tr("Processes")],
@@ -179,9 +180,16 @@ struct ToolsTabView: View {
             default: utilities
             }
         }
+        .onAppear { SecureInputWatcher.shared.start() }
+        .onDisappear { SecureInputWatcher.shared.stop() }
     }
 
     @ViewBuilder private var utilities: some View {
+            if let holder = secureInput.holder {
+                JBanner(icon: "keyboard.badge.ellipsis",
+                        text: tr("\(holder.name) is blocking keyboard shortcuts (Secure Input). Quit it to restore them."),
+                        actionTitle: tr("Quit")) { secureInput.quitHolder() }
+            }
             VStack(alignment: .leading, spacing: 10) {
                 JToggleRow(icon: "cup.and.saucer", title: tr("Keep awake"),
                            subtitle: caffeine.isActive && !caffeine.remainingFormatted.isEmpty ? tr("\(caffeine.remainingFormatted) left") : nil,
