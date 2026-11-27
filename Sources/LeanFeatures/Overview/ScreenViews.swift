@@ -9,20 +9,16 @@ struct DisplayCard: View {
     let monitor: DisplayInfo
     @ObservedObject var displayManager: DisplayManager
 
+    @State private var expanded: Bool
+
+    init(monitor: DisplayInfo, displayManager: DisplayManager) {
+        self.monitor = monitor
+        self.displayManager = displayManager
+        _expanded = State(initialValue: monitor.isBuiltIn)
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 10) {
-                Image(systemName: monitor.isBuiltIn ? "laptopcomputer" : "display")
-                    .font(.system(size: 20)).foregroundStyle(Pal.accent).frame(width: 26)
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(monitor.name).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink).lineLimit(1)
-                    Text("\(monitor.resolution) · " + (monitor.isBuiltIn ? tr("Built-in") : tr("External")))
-                        .font(.system(size: 12)).foregroundStyle(Pal.ink3).lineLimit(1)
-                }
-                Spacer(minLength: 4)
-                Text("\(Int(round(monitor.brightness * 100)))%")
-                    .font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
-            }
+        DisclosureGroup(isExpanded: $expanded) {
             if monitor.isConnected {
                 HStack(spacing: 8) {
                     Image(systemName: "sun.min").font(.system(size: 12)).foregroundStyle(Pal.ink3)
@@ -34,6 +30,19 @@ struct DisplayCard: View {
                 DisplayModeControls(displayID: monitor.id, manager: .shared) { EmptyView() }
             } else {
                 Text(tr("Display is off")).font(.system(size: 12)).foregroundStyle(Pal.ink3)
+            }
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: monitor.isBuiltIn ? "laptopcomputer" : "display")
+                    .font(.system(size: 20)).foregroundStyle(Pal.accent).frame(width: 26)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(monitor.name).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink).lineLimit(1)
+                    Text("\(monitor.resolution) · " + (monitor.isBuiltIn ? tr("Built-in") : tr("External")))
+                        .font(.system(size: 12)).foregroundStyle(Pal.ink3).lineLimit(1)
+                }
+                Spacer(minLength: 4)
+                Text("\(Int(round(monitor.brightness * 100))) %")
+                    .font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
             }
         }
         .jCard()

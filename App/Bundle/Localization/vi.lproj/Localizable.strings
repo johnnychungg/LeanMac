@@ -1,12 +1,9 @@
 /* Vietnamese (vi) translations. Key = English source text.
    %@ / %N$@ are runtime values; %% is a literal percent sign. */
 
-"%@ cycles" = "%1$@ chu kỳ";
 "%@ days" = "%1$@ ngày";
-"%@ in menu bar" = "%1$@ mục trên menu bar";
 "%@ items" = "%1$@ mục";
 "%@ left" = "Còn %1$@";
-"%@ sensor details" = "Chi tiết %1$@ cảm biến";
 "%@d" = "%1$@ ngày";
 "%@d ago" = "%1$@ ngày trước";
 "%@mo ago" = "%1$@ tháng trước";
@@ -19,7 +16,6 @@
 "About %@h%@m left" = "Còn khoảng %1$@h%2$@m";
 "Accessibility" = "Trợ năng (Accessibility)";
 "Accessibility missing, shortcuts are off" = "Thiếu quyền Trợ năng, phím tắt chưa hoạt động";
-"Active" = "Đang bật";
 "Adapter" = "Củ sạc";
 "Add shortcut" = "Thêm phím";
 "Add shortcut for %@" = "Thêm phím cho %1$@";
@@ -39,7 +35,6 @@
 "Applying display mode…" = "Đang đổi chế độ…";
 "Applying..." = "Đang áp dụng...";
 "Arrange windows" = "Chia cửa sổ";
-"Assign keys to actions" = "Gán phím cho từng chức năng";
 "Auto" = "Tự động";
 "Auto-calibrate periodically" = "Tự động hiệu chuẩn định kỳ";
 "Automatically turns off Bluetooth when lid is closed to eliminate overnight battery drain. Quit and reopen LeanMac after granting." = "Tự động ngắt kết nối Bluetooth khi gập màn hình máy Mac để chống tụt pin qua đêm. Cấp quyền xong cần thoát và mở lại LeanMac để nhận.";
@@ -80,15 +75,12 @@
 "Center" = "Căn giữa";
 "Change, add or disable key combinations" = "Đổi, thêm hoặc tắt từng tổ hợp phím";
 "Charge limit" = "Khóa sạc";
-"Charge limit %@%%" = "Khóa sạc %1$@%%";
 "Charge locked at %@%%" = "Đã khóa sạc ở %1$@%%";
 "Charging" = "Đang sạc";
 "Charging the battery" = "Đang nạp vào pin";
 "Charging to %@%% (%@%%)" = "Đang sạc lên %1$@%% (%2$@%%)";
 "Choose Color" = "Chọn màu vẽ";
 "Choose a key with modifiers." = "Chọn một phím cùng tổ hợp bổ trợ.";
-"Clean %@ item(s) (%@)?" = "Dọn %1$@ mục (%2$@)?";
-"Clean %@ item(s) · %@" = "Dọn %1$@ mục · %2$@";
 "Cleaned %@" = "Đã dọn %1$@";
 "Cleaner" = "Dọn dẹp";
 "Cleaning…" = "Đang dọn…";
@@ -143,7 +135,6 @@
 "F1/F2 are used for brightness. Add a modifier." = "F1/F2 đang dành cho độ sáng. Hãy thêm phím bổ trợ.";
 "Files remained in original location" = "Tệp vẫn giữ nguyên vị trí cũ";
 "Finder cut and paste" = "Finder cắt / dán";
-"Finder cut/paste" = "Finder cắt/dán";
 "Finding related files" = "Đang tìm tệp liên quan";
 "Fully charged 100%%" = "Đã sạc đầy 100%%";
 "GPU Cluster %@" = "GPU Cụm %1$@";
@@ -155,7 +146,6 @@
 "HARDWARE" = "PHẦN CỨNG";
 "Hardware" = "Phần cứng";
 "Health" = "Sức khỏe";
-"Health %@%%" = "Sức khỏe %1$@%%";
 "Highlighter" = "Bút dạ quang";
 "Holding 100%% for 15 minutes." = "Đang giữ 100%% trong 15 phút.";
 "Hot (Not throttling)" = "Nóng (Chưa giảm xung)";
@@ -169,7 +159,6 @@
 "Interval" = "Chu kỳ";
 "Junk" = "Dọn rác";
 "Keep awake" = "Chống sleep";
-"Keep awake %@" = "Chống sleep %1$@";
 "Keep awake: time is up" = "Chống sleep: đã hết giờ";
 "Keep ordinary window sizes, shrinking only to fit. Edge-spanning or maximized windows adapt to the destination." = "Giữ kích thước cửa sổ thường, thu nhỏ nếu không vừa. Cửa sổ bám mép hoặc phóng lớn thích ứng với màn đích.";
 "Keep window size" = "Giữ kích thước cửa sổ";
@@ -222,7 +211,6 @@
 "Normal" = "Bình thường";
 "Not charging" = "Không nạp thêm";
 "Not installed" = "Chưa cài";
-"Nothing enabled" = "Chưa bật tính năng nào";
 "Notice" = "Thông báo";
 "Now charging to 100%%." = "Đang sạc lên 100%%.";
 "OK" = "Đã hiểu";
@@ -303,7 +291,6 @@
 "Screen recording needed for thumbnails" = "Cần quyền Ghi màn hình để hiện thumbnail";
 "Screenshot" = "Chụp màn hình";
 "Screenshot annotation text" = "Nội dung chữ trên ảnh";
-"Screenshots" = "Chụp ảnh";
 "Search apps" = "Tìm app";
 "Select apps to uninstall" = "Chọn app cần gỡ";
 "Select files to remove" = "Chọn tệp cần xoá";
@@ -317,7 +304,6 @@
 "Sleep Guard on lid close" = "Sleep Guard khi gập máy";
 "Sleep Guard: sleep report" = "Sleep Guard: báo cáo lần ngủ";
 "Slept %@h%@m • %@" = "Ngủ %1$@h%2$@m • %3$@";
-"Snapping" = "Chia cửa sổ";
 "Soft-disconnected" = "Đã ngắt mềm";
 "Standard charging (%@%%)" = "Đang sạc thường (%1$@%%)";
 "Startup" = "Khởi động";
@@ -331,7 +317,6 @@
 "Successfully moved" = "Đã di chuyển thành công";
 "Successfully moved to current folder" = "Đã hoàn tất di chuyển vào thư mục hiện tại";
 "Switch windows" = "Chuyển cửa sổ";
-"Switcher" = "Chuyển cửa sổ";
 "System default" = "Theo hệ thống";
 "Temp" = "Nhiệt pin";
 "Temporary 100%% top-up" = "Sạc đầy 100%% tạm thời";
@@ -459,3 +444,28 @@
 "Reference" = "Chuẩn";
 "Waiting for your confirmation" = "Đang chờ xác nhận";
 "%@ is blocking keyboard shortcuts (Secure Input). Quit it to restore them." = "%@ đang chặn phím tắt (Secure Input). Thoát nó để phím tắt hoạt động lại.";
+"About LeanMac" = "Giới thiệu LeanMac";
+"Battery details" = "Chi tiết pin";
+"Cancel top-up" = "Huỷ sạc đầy";
+"Charge locked at %@ %%" = "Giữ pin ở %@ %%";
+"Charge to 100 %%" = "Sạc lên 100 %%";
+"Cool" = "Mát";
+"Critical pressure" = "Áp lực rất cao";
+"Elevated pressure" = "Áp lực cao";
+"Empty Trash" = "Dọn sạch Thùng rác";
+"Find a sensor" = "Tìm cảm biến";
+"High load" = "Tải cao";
+"Hot" = "Nóng";
+"Menu bar items" = "Mục trên thanh menu";
+"No matching sensors" = "Không tìm thấy cảm biến";
+"Normal load" = "Tải bình thường";
+"Normal pressure" = "Áp lực bình thường";
+"Previous" = "Trước";
+"Quick actions" = "Thao tác nhanh";
+"Select the Trash separately to empty it." = "Chọn riêng Thùng rác để dọn sạch.";
+"Start 30 min" = "Bật 30 phút";
+"Stop" = "Dừng";
+"Temperature sensors" = "Cảm biến nhiệt độ";
+"Very high load" = "Tải rất cao";
+"View all sensors" = "Xem tất cả cảm biến";
+"Warm" = "Ấm";

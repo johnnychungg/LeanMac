@@ -14,5 +14,6 @@ package final class UIState: ObservableObject {
     @Published package var toolsSub: Int = 0
     /// The Settings page (opened from the gear) is showing
     @Published package var settingsOpen: Bool = false
+    var openPermissionDetails = false
     @Published package var permissionsOpen: Bool = false
 }

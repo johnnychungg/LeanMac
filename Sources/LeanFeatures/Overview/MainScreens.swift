@@ -11,7 +11,7 @@ func groupCard<Content: View>(@ViewBuilder _ content: () -> Content) -> some Vie
         .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Pal.card))
 }
 
-// MARK: - Overview tab (read-only; cards are clickable and jump to the right place)
+// MARK: - Overview
 
 struct OverviewTabView: View {
     @ObservedObject var displayManager: DisplayManager
@@ -20,10 +20,7 @@ struct OverviewTabView: View {
     @ObservedObject var thermalManager: ThermalManager
     @ObservedObject private var monitor = SystemMonitorManager.shared
     @ObservedObject private var caffeine = CaffeinateManager.shared
-    @ObservedObject private var snap = WindowSnapManager.shared
-    @ObservedObject private var windows = WindowManager.shared
     @ObservedObject private var shots = ScreenshotManager.shared
-    @ObservedObject private var finder = FinderCutPasteManager.shared
     @ObservedObject private var ui = UIState.shared
 
     private func go(_ tab: Int, sub: Int? = nil) {
@@ -31,8 +28,8 @@ struct OverviewTabView: View {
         UIState.shared.selectedMainTab = tab
     }
 
-    private func pct(_ v: Double) -> String { "\(Int(v.rounded()))%" }
-    private func temp(_ v: Double) -> String { v > 0 ? String(format: "%.0f°", v) : "–" }
+    private func pct(_ v: Double) -> String { "\(Int(v.rounded())) %" }
+    private func temp(_ v: Double) -> String { v > 0 ? String(format: "%.0f °C", v) : "–" }
 
     /// Clickable card: content + a small arrow in the corner.
     private func linkCard<C: View>(_ action: @escaping () -> Void, @ViewBuilder _ content: () -> C) -> some View {
@@ -47,23 +44,14 @@ struct OverviewTabView: View {
         .buttonStyle(.plain)
     }
 
-    private var activeChips: [(String, String)] {
-        var list: [(String, String)] = []
-        if batteryManager.hasBattery && batteryManager.isProtectionEnabled {
-            list.append(("lock", tr("Charge limit \(batteryManager.chargeLimit)%")))
+    private func metric(_ title: String, _ value: String, _ level: MonLevel, memory: Bool = false, thermal: Bool = false) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(title).foregroundStyle(Pal.ink2)
+            Text(value).font(.headline).monospacedDigit()
+            Text(value == "–" ? "–" : (thermal ? level.temperatureLabel : (memory ? level.pressureLabel : level.loadLabel)))
         }
-        if batteryManager.isSleepGuardEnabled { list.append(("moon.stars", "Sleep Guard")) }
-        if caffeine.isActive {
-            list.append(("cup.and.saucer", caffeine.remainingFormatted.isEmpty ? tr("Keep awake")
-                         : tr("Keep awake \(caffeine.remainingFormatted)")))
-        }
-        if snap.isSnapEnabled { list.append(("rectangle.split.2x1", tr("Snapping"))) }
-        if windows.isAltTabEnabled { list.append(("macwindow.on.rectangle", tr("Switcher"))) }
-        if shots.isScreenshotEnabled { list.append(("camera.viewfinder", tr("Screenshots"))) }
-        if finder.isEnabled { list.append(("scissors", tr("Finder cut/paste"))) }
-        let pins = [monitor.showCPUMenuBar, monitor.showRAMMenuBar, monitor.showGPUMenuBar && monitor.hasGPU, thermalManager.showMenuBarMetrics].filter { $0 }.count
-        if pins > 0 { list.append(("pin", tr("\(pins) in menu bar"))) }
-        return list
+        .font(.caption).foregroundStyle(memory && level == .normal ? Pal.info : level.color)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     var body: some View {
@@ -71,7 +59,7 @@ struct OverviewTabView: View {
             // Warnings: only shown when something is abnormal
             if !permissionsManager.hasAccessibility {
                 JBanner(icon: "exclamationmark.triangle", text: tr("Accessibility missing, shortcuts are off"),
-                        chevron: "chevron.right") { ui.settingsOpen = true }
+                        chevron: "chevron.right") { ui.openPermissionDetails = true; ui.settingsOpen = true }
             }
             if !batteryManager.isHelperInstalled && batteryManager.hasBattery {
                 let old = batteryManager.helperVersion > 0 && batteryManager.helperVersion != PrivilegedHelper.requiredVersion
@@ -87,74 +75,73 @@ struct OverviewTabView: View {
                 JBanner(icon: "calendar.badge.exclamationmark", text: tr("Battery calibration is due"), chevron: "chevron.right") { go(1, sub: 0) }
             }
 
-            // Pin
             if batteryManager.hasBattery {
-                linkCard({ go(1, sub: 0) }) {
-                    ZStack {
-                        Circle().stroke(Pal.lineStrong.opacity(0.5), lineWidth: 6)
-                        Circle()
-                            .trim(from: 0, to: CGFloat(min(max(batteryManager.currentLevel, 0), 100)) / 100)
-                            .stroke(Pal.accent, style: StrokeStyle(lineWidth: 6, lineCap: .round))
-                            .rotationEffect(.degrees(-90))
-                        Text("\(batteryManager.currentLevel)%").font(.system(size: 14, weight: .medium)).foregroundStyle(Pal.ink)
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Label(tr("Battery"), systemImage: "battery.75percent")
+                        Spacer()
+                        Text(batteryManager.isPluggedIn ? tr("Plugged in") : tr("On battery"))
+                    }.font(.caption)
+                    HStack(alignment: .firstTextBaseline) {
+                        HStack(alignment: .firstTextBaseline, spacing: 4) {
+                            Text("\(batteryManager.currentLevel)").font(.system(size: 36, weight: .semibold))
+                            Text("%").font(.title3)
+                        }.monospacedDigit()
+                        Spacer()
+                        Text(batteryManager.calibrationState == .idle ? batteryManager.statusMessage : batteryManager.calibrationMessage)
+                            .font(.caption).multilineTextAlignment(.trailing)
                     }
-                    .frame(width: 56, height: 56)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(batteryManager.calibrationState != .idle ? batteryManager.calibrationMessage : batteryManager.statusMessage)
-                            .font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
-                            .fixedSize(horizontal: false, vertical: true)
-                        HStack(spacing: 6) {
-                            JStatusChip(text: tr("Health \(batteryManager.healthPercent)%"))
-                            JStatusChip(text: tr("\(batteryManager.cycleCount) cycles"))
-                        }
-                    }
-                    Spacer(minLength: 0)
+                    ProgressView(value: Double(batteryManager.currentLevel), total: 100).tint(Pal.accent)
+                    HStack {
+                        Button(batteryManager.isTopUpActive ? tr("Cancel top-up") : tr("Charge to 100 %")) {
+                            batteryManager.isTopUpActive.toggle()
+                        }.buttonStyle(.borderedProminent).tint(Pal.accent)
+                            .disabled(!batteryManager.isHelperInstalled || !batteryManager.isProtectionEnabled || batteryManager.calibrationState != .idle)
+                        Spacer()
+                        Button(tr("Battery details")) { go(1, sub: 0) }
+                    }.controlSize(.small)
                 }
+                .foregroundStyle(Pal.ink).padding(12)
+                .background(LinearGradient(colors: [Pal.heroStart, Pal.heroEnd], startPoint: .topLeading, endPoint: .bottomTrailing),
+                            in: RoundedRectangle(cornerRadius: 12))
             }
 
-            // Temperature + load
+            VStack(alignment: .leading, spacing: 8) {
+                Text(tr("Quick actions")).font(.headline)
+                HStack {
+                    Label(tr("Keep awake"), systemImage: "cup.and.saucer")
+                    Spacer()
+                    if caffeine.isActive { Text(caffeine.remainingFormatted).font(.caption) }
+                    Button(caffeine.isActive ? tr("Stop") : tr("Start 30 min")) {
+                        if caffeine.isActive { caffeine.disable() } else { caffeine.enable(duration: .min30) }
+                    }
+                }
+                JDivider()
+                HStack {
+                    Label(tr("Annotated screenshots"), systemImage: "camera.viewfinder")
+                    Spacer()
+                    Button(tr("Capture now")) { shots.startCapture() }.disabled(!shots.isScreenshotEnabled)
+                }
+            }.controlSize(.small).jCard()
+
             linkCard({ go(1, sub: 2) }) {
-                VStack(spacing: 8) {
-                    HStack(spacing: 6) {
-                        JTile(label: "CPU", value: pct(monitor.cpuUsagePercent))
-                        JTile(label: "RAM", value: pct(monitor.ramUsagePercent))
-                        JTile(label: "GPU", value: monitor.hasGPU ? pct(monitor.gpuUsagePercent) : "–")
-                        JTile(label: tr("Temperature"), value: temp(thermalManager.displayTemp))
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(tr("Monitor")).font(.headline)
+                    HStack {
+                        metric("CPU", pct(monitor.cpuUsagePercent), MonLevel.percent(monitor.cpuUsagePercent))
+                        metric("RAM", monitor.memoryStats == nil ? "–" : pct(monitor.ramUsagePercent), monitor.memoryPressure == .critical ? .danger : (monitor.memoryPressure == .warning ? .warn : .normal), memory: true)
+                        metric(tr("Temperature"), temp(thermalManager.displayTemp), MonLevel.temp(thermalManager.displayTemp), thermal: true)
                     }
                 }
-            }
-            .onAppear { monitor.beginPreview() }
-            .onDisappear { monitor.endPreview() }
+            }.onAppear { monitor.beginPreview() }.onDisappear { monitor.endPreview() }
 
-            // Display
             if !displayManager.monitors.isEmpty {
                 linkCard({ go(1, sub: 1) }) {
-                    VStack(spacing: 8) {
-                        ForEach(displayManager.monitors) { m in
-                            HStack(spacing: 8) {
-                                Image(systemName: m.isBuiltIn ? "laptopcomputer" : "display").font(.system(size: 13)).foregroundStyle(Pal.accent).frame(width: 20)
-                                Text(m.name).font(.system(size: 13)).foregroundStyle(Pal.ink).lineLimit(1)
-                                Spacer(minLength: 4)
-                                Text(m.resolution).font(.system(size: 12)).foregroundStyle(Pal.ink3).lineLimit(1)
-                                Text("\(Int(round(m.brightness * 100)))%").font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
-                            }
-                        }
-                    }
+                    Label(tr("Displays"), systemImage: "display")
+                    Spacer()
+                    Text("\(displayManager.monitors.count)").monospacedDigit()
                 }
             }
-
-            // Currently on
-            VStack(alignment: .leading, spacing: 8) {
-                Text(tr("Active")).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
-                if activeChips.isEmpty {
-                    Text(tr("Nothing enabled")).font(.system(size: 12)).foregroundStyle(Pal.ink3)
-                } else {
-                    FlowLayout(spacing: 6) {
-                        ForEach(activeChips, id: \.1) { chip in JChip(text: chip.1, icon: chip.0, selected: true) }
-                    }
-                }
-            }
-            .jCard()
         }
     }
 }
@@ -219,6 +206,7 @@ struct ToolsTabView: View {
                     JToggleRow(icon: "display", title: tr("Only windows on current display"),
                                isOn: Binding(get: { windows.showOnlyCurrentScreenWindows }, set: { windows.showOnlyCurrentScreenWindows = $0 }))
                         .padding(.vertical, 8)
+                        .padding(.leading, 22)
                     if !windows.hasScreenRecording {
                         JDivider()
                         HStack {
@@ -230,23 +218,24 @@ struct ToolsTabView: View {
                         .padding(.vertical, 8)
                     }
                 }
-                JDivider()
+            }
+
+            groupCard {
                 JToggleRow(icon: "camera.viewfinder", title: tr("Annotated screenshots"),
                            isOn: Binding(get: { shots.isScreenshotEnabled }, set: { shots.isScreenshotEnabled = $0 }),
                            trailing: AnyView(KeyCaps(keys: [shortcuts.primaryTitle(.screenshot)])))
                     .padding(.vertical, 8)
+                if shots.isScreenshotEnabled {
+                    Button { shots.startCapture() } label: {
+                        HStack(spacing: 6) { Image(systemName: "camera.viewfinder"); Text(tr("Capture now")) }
+                    }
+                    .buttonStyle(JButtonStyle(kind: .ghost))
+                }
                 JDivider()
                 JToggleRow(icon: "scissors", title: tr("Finder cut and paste"),
                            isOn: Binding(get: { finder.isEnabled }, set: { finder.isEnabled = $0 }),
                            trailing: AnyView(KeyCaps(keys: ["⌘X", "⌘V"])))
                     .padding(.vertical, 8)
-            }
-
-            if shots.isScreenshotEnabled {
-                Button { shots.startCapture() } label: {
-                    HStack(spacing: 6) { Image(systemName: "camera.viewfinder"); Text(tr("Capture now")) }
-                }
-                .buttonStyle(JButtonStyle(kind: .ghost))
             }
         }
     }
@@ -262,7 +251,24 @@ struct SettingsView: View {
     @ObservedObject private var appearance = AppearanceManager.shared
     @ObservedObject private var shortcuts = ShortcutManager.shared
     @ObservedObject private var updates = UpdateManager.shared
-    @State private var showKeys = false
+    private enum Detail { case updates, shortcuts, permissions, about }
+    @State private var detail: Detail?
+
+    init(permissionsManager: PermissionsManager, batteryManager: BatteryManager) {
+        self.permissionsManager = permissionsManager
+        self.batteryManager = batteryManager
+        _detail = State(initialValue: UIState.shared.openPermissionDetails ? .permissions : nil)
+    }
+
+    private func destination(_ title: String, icon: String, detail target: Detail) -> some View {
+        Button { detail = target } label: {
+            HStack {
+                Label(title, systemImage: icon)
+                Spacer()
+                Image(systemName: "chevron.right").foregroundStyle(Pal.ink3)
+            }.padding(.vertical, 8).contentShape(Rectangle())
+        }.buttonStyle(.plain)
+    }
 
     private func section(_ title: String) -> some View {
         Text(title).font(.system(size: 12, weight: .medium)).foregroundStyle(Pal.ink3)
@@ -272,7 +278,7 @@ struct SettingsView: View {
     var body: some View {
         VStack(spacing: 8) {
             HStack(spacing: 6) {
-                Button { withAnimation(.easeOut(duration: 0.15)) { ui.settingsOpen = false } } label: {
+                Button { if detail != nil { detail = nil } else { ui.settingsOpen = false } } label: {
                     HStack(spacing: 3) {
                         Image(systemName: "chevron.left").font(.system(size: 12, weight: .semibold))
                         Text(tr("Back")).font(.system(size: 13))
@@ -289,84 +295,90 @@ struct SettingsView: View {
 
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 10) {
-                    section(tr("General"))
-                    groupCard {
-                        HStack(spacing: 10) {
-                            JIcon(name: "globe")
-                            Text(tr("Language")).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
-                            Spacer()
-                            Menu {
-                                ForEach(AppLanguage.allCases) { option in
-                                    Button { language.switchLanguage(to: option) } label: {
-                                        if option == language.currentLanguage {
-                                            Label(option.displayName, systemImage: "checkmark")
-                                        } else { Text(option.displayName) }
+                    switch detail {
+                    case .updates:
+                        UpdateSettingsCard(updates: updates)
+                    case .shortcuts:
+                        ShortcutMapView(manager: shortcuts)
+                    case .permissions:
+                        PermissionsStrip(permissionsManager: permissionsManager, alwaysOpen: true)
+                    case .about:
+                        VStack(spacing: 8) {
+                            Image(nsImage: NSApp.applicationIconImage).resizable().frame(width: 58, height: 58)
+                            Text("LeanMac " + updates.currentVersion).font(.headline)
+                            Text("GPL-3.0").font(.caption)
+                            Button(tr("Quit LeanMac")) { NSApp.terminate(nil) }
+                        }.frame(maxWidth: .infinity).jCard()
+                    case nil:
+                        section(tr("General"))
+                        groupCard {
+                            HStack(spacing: 10) {
+                                JIcon(name: "globe")
+                                Text(tr("Language")).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
+                                Spacer()
+                                Menu {
+                                    ForEach(AppLanguage.allCases) { option in
+                                        Button { language.switchLanguage(to: option) } label: {
+                                            if option == language.currentLanguage {
+                                                Label(option.displayName, systemImage: "checkmark")
+                                            } else { Text(option.displayName) }
+                                        }
                                     }
+                                } label: {
+                                    Text(language.currentLanguage.displayName).font(.system(size: 12, weight: .medium)).lineLimit(1)
                                 }
-                            } label: {
-                                Text(language.currentLanguage.displayName).font(.system(size: 12, weight: .medium)).lineLimit(1)
+                                .menuStyle(.borderlessButton)
+                                .fixedSize()
+                                .accessibilityLabel(tr("Language"))
                             }
-                            .menuStyle(.borderlessButton)
-                            .fixedSize()
-                            .accessibilityLabel(tr("Language"))
-                        }
-                        .padding(.vertical, 8)
-                        JDivider()
-                        HStack(spacing: 10) {
-                            JIcon(name: "circle.lefthalf.filled")
-                            Text(tr("Appearance")).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
-                                .lineLimit(1).fixedSize(horizontal: true, vertical: false)
-                            Spacer(minLength: 4)
-                            JSegmented(items: [tr("Auto"), tr("Light"), tr("Dark")],
-                                       selection: Binding(get: { appearance.mode }, set: { appearance.mode = $0 }))
-                                .frame(width: 168)
-                        }
-                        .padding(.vertical, 8)
-                        JDivider()
-                        JToggleRow(icon: "power.circle", title: tr("Launch at login"),
-                                   isOn: Binding(get: { login.isEnabled }, set: { login.setEnabled($0) }))
                             .padding(.vertical, 8)
-                    }
-
-                    section(tr("Updates"))
-                    UpdateSettingsCard(updates: updates)
-
-                    section(tr("Shortcuts"))
-                    Button { withAnimation(.easeOut(duration: 0.15)) { showKeys.toggle() } } label: {
-                        HStack(spacing: 10) {
-                            JIcon(name: "command")
-                            Text(tr("Assign keys to actions")).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
-                            Spacer()
-                            Image(systemName: showKeys ? "chevron.up" : "chevron.down").font(.system(size: 11, weight: .medium)).foregroundStyle(Pal.ink3)
-                        }
-                        .contentShape(Rectangle())
-                        .jCard()
-                    }
-                    .buttonStyle(.plain)
-                    if showKeys { ShortcutMapView(manager: shortcuts) }
-
-                    section(tr("Permissions"))
-                    PermissionsStrip(permissionsManager: permissionsManager, alwaysOpen: true)
-
-                    section(tr("Advanced"))
-                    groupCard {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 1) {
-                                Text("Helper SMC").font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
-                                // No version number: "installed" already means it is the one this app needs.
-                                Text(batteryManager.isHelperInstalled ? tr("Installed")
-                                     : (batteryManager.isHelperOutdated ? tr("Update needed") : tr("Not installed")))
-                                    .font(.system(size: 12)).foregroundStyle(Pal.ink3)
+                            JDivider()
+                            HStack(spacing: 10) {
+                                JIcon(name: "circle.lefthalf.filled")
+                                Text(tr("Appearance")).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
+                                    .lineLimit(1).fixedSize(horizontal: true, vertical: false)
+                                Spacer(minLength: 4)
+                                JSegmented(items: [tr("Auto"), tr("Light"), tr("Dark")],
+                                           selection: Binding(get: { appearance.mode }, set: { appearance.mode = $0 }))
+                                    .frame(width: 168)
                             }
-                            Spacer()
-                            JChip(text: batteryManager.isInstallingHelper ? tr("Installing…")
-                                  : (batteryManager.isHelperInstalled ? tr("Reinstall")
-                                     : (batteryManager.isHelperOutdated ? tr("Update") : tr("Install"))),
-                                  selected: !batteryManager.isHelperInstalled) {
-                                if !batteryManager.isInstallingHelper { batteryManager.installHelper() }
-                            }
+                            .padding(.vertical, 8)
+                            JDivider()
+                            JToggleRow(icon: "power.circle", title: tr("Launch at login"),
+                                       isOn: Binding(get: { login.isEnabled }, set: { login.setEnabled($0) }))
+                                .padding(.vertical, 8)
                         }
-                        .padding(.vertical, 8)
+
+                        groupCard {
+                            destination(tr("Permissions"), icon: "checkmark.shield", detail: .permissions)
+                            JDivider()
+                            destination(tr("Shortcuts"), icon: "command", detail: .shortcuts)
+                            JDivider()
+                            destination(tr("Updates"), icon: "arrow.down.circle", detail: .updates)
+                            JDivider()
+                            destination(tr("About LeanMac"), icon: "info.circle", detail: .about)
+                        }
+
+                        section(tr("Advanced"))
+                        groupCard {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 1) {
+                                    Text("Helper SMC").font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
+                                    // No version number: "installed" already means it is the one this app needs.
+                                    Text(batteryManager.isHelperInstalled ? tr("Installed")
+                                         : (batteryManager.isHelperOutdated ? tr("Update needed") : tr("Not installed")))
+                                        .font(.system(size: 12)).foregroundStyle(Pal.ink3)
+                                }
+                                Spacer()
+                                JChip(text: batteryManager.isInstallingHelper ? tr("Installing…")
+                                      : (batteryManager.isHelperInstalled ? tr("Reinstall")
+                                         : (batteryManager.isHelperOutdated ? tr("Update") : tr("Install"))),
+                                      selected: !batteryManager.isHelperInstalled) {
+                                    if !batteryManager.isInstallingHelper { batteryManager.installHelper() }
+                                }
+                            }
+                            .padding(.vertical, 8)
+                        }
                     }
                 }
                 .padding(.horizontal, 14)

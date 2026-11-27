@@ -1,9 +1,6 @@
-"%@ cycles" = "%@ ciclos";
 "%@ days" = "%@ días";
-"%@ in menu bar" = "%@ en la barra de menús";
 "%@ items" = "%@ elementos";
 "%@ left" = "%@ restantes";
-"%@ sensor details" = "%@ detalles de sensores";
 "%@d" = "%@d";
 "%@d ago" = "hace %@d";
 "%@mo ago" = "hace %@ meses";
@@ -16,7 +13,6 @@
 "About %@h%@m left" = "Quedan unos %@h %@min";
 "Accessibility" = "Accesibilidad";
 "Accessibility missing, shortcuts are off" = "Falta el permiso de Accesibilidad; los atajos están desactivados";
-"Active" = "Activo";
 "Adapter" = "Adaptador";
 "Add shortcut" = "Añadir atajo";
 "Add shortcut for %@" = "Añadir atajo para %@";
@@ -36,7 +32,6 @@
 "Applying display mode…" = "Aplicando el modo de pantalla…";
 "Applying..." = "Aplicando...";
 "Arrange windows" = "Organizar ventanas";
-"Assign keys to actions" = "Asignar teclas a acciones";
 "Auto" = "Auto";
 "Auto-calibrate periodically" = "Calibrar automáticamente cada cierto tiempo";
 "Automatically turns off Bluetooth when lid is closed to eliminate overnight battery drain. Quit and reopen LeanMac after granting." = "Desactiva el Bluetooth automáticamente al cerrar la tapa para eliminar el gasto de batería nocturno. Cierra y vuelve a abrir LeanMac tras conceder el permiso.";
@@ -77,15 +72,12 @@
 "Center" = "Centro";
 "Change, add or disable key combinations" = "Cambiar, añadir o desactivar combinaciones de teclas";
 "Charge limit" = "Límite de carga";
-"Charge limit %@%%" = "Límite de carga %@%%";
 "Charge locked at %@%%" = "Carga bloqueada al %@%%";
 "Charging" = "Cargando";
 "Charging the battery" = "Cargando la batería";
 "Charging to %@%% (%@%%)" = "Cargando hasta el %@%% (%@%%)";
 "Choose Color" = "Elegir color";
 "Choose a key with modifiers." = "Elige una tecla con modificadores.";
-"Clean %@ item(s) (%@)?" = "¿Limpiar %@ elemento(s) (%@)?";
-"Clean %@ item(s) · %@" = "Limpiar %@ elemento(s) · %@";
 "Cleaned %@" = "%@ limpiados";
 "Cleaner" = "Limpiador";
 "Cleaning…" = "Limpiando…";
@@ -140,7 +132,6 @@
 "F1/F2 are used for brightness. Add a modifier." = "F1/F2 se usan para el brillo. Añade un modificador.";
 "Files remained in original location" = "Los archivos quedaron en su ubicación original";
 "Finder cut and paste" = "Cortar y pegar en el Finder";
-"Finder cut/paste" = "Cortar/pegar en el Finder";
 "Finding related files" = "Buscando archivos relacionados";
 "Fully charged 100%%" = "Carga completa 100%%";
 "GPU Cluster %@" = "Clúster de GPU %@";
@@ -152,7 +143,6 @@
 "HARDWARE" = "HARDWARE";
 "Hardware" = "Hardware";
 "Health" = "Salud";
-"Health %@%%" = "Salud %@%%";
 "Highlighter" = "Resaltador";
 "Holding 100%% for 15 minutes." = "Manteniendo el 100%% durante 15 minutos.";
 "Hot (Not throttling)" = "Caliente (sin limitación)";
@@ -166,7 +156,6 @@
 "Interval" = "Intervalo";
 "Junk" = "Basura";
 "Keep awake" = "Mantener activo";
-"Keep awake %@" = "Mantener activo %@";
 "Keep awake: time is up" = "Mantener activo: se acabó el tiempo";
 "Keep ordinary window sizes, shrinking only to fit. Edge-spanning or maximized windows adapt to the destination." = "Mantiene el tamaño de las ventanas normales y solo las reduce para que quepan. Las ventanas pegadas a los bordes o maximizadas se adaptan al destino.";
 "Keep window size" = "Mantener tamaño de ventana";
@@ -219,7 +208,6 @@
 "Normal" = "Normal";
 "Not charging" = "Sin cargar";
 "Not installed" = "No instalado";
-"Nothing enabled" = "Nada activado";
 "Notice" = "Aviso";
 "Now charging to 100%%." = "Cargando ahora hasta el 100%%.";
 "OK" = "Aceptar";
@@ -300,7 +288,6 @@
 "Screen recording needed for thumbnails" = "Se necesita Grabación de pantalla para las miniaturas";
 "Screenshot" = "Captura de pantalla";
 "Screenshot annotation text" = "Texto de anotación de la captura";
-"Screenshots" = "Capturas de pantalla";
 "Search apps" = "Buscar apps";
 "Select apps to uninstall" = "Selecciona las apps que desinstalar";
 "Select files to remove" = "Selecciona los archivos que eliminar";
@@ -314,7 +301,6 @@
 "Sleep Guard on lid close" = "Sleep Guard al cerrar la tapa";
 "Sleep Guard: sleep report" = "Sleep Guard: informe de suspensión";
 "Slept %@h%@m • %@" = "Suspendido %@h %@min • %@";
-"Snapping" = "Ajuste";
 "Soft-disconnected" = "Desconexión suave";
 "Standard charging (%@%%)" = "Carga estándar (%@%%)";
 "Startup" = "Inicio";
@@ -328,7 +314,6 @@
 "Successfully moved" = "Movido correctamente";
 "Successfully moved to current folder" = "Movido correctamente a la carpeta actual";
 "Switch windows" = "Cambiar de ventana";
-"Switcher" = "Selector";
 "System default" = "Predeterminado del sistema";
 "Temp" = "Temp.";
 "Temporary 100%% top-up" = "Recarga temporal al 100%%";
@@ -456,3 +441,28 @@
 "Reference" = "Referencia";
 "Waiting for your confirmation" = "Esperando tu confirmación";
 "%@ is blocking keyboard shortcuts (Secure Input). Quit it to restore them." = "%@ está bloqueando los atajos de teclado (Secure Input). Ciérrala para restaurarlos.";
+"About LeanMac" = "Acerca de LeanMac";
+"Battery details" = "Detalles de la batería";
+"Cancel top-up" = "Cancelar carga completa";
+"Charge locked at %@ %%" = "Carga limitada al %@ %%";
+"Charge to 100 %%" = "Cargar al 100 %%";
+"Cool" = "Fresco";
+"Critical pressure" = "Presión crítica";
+"Elevated pressure" = "Presión elevada";
+"Empty Trash" = "Vaciar la Papelera";
+"Find a sensor" = "Buscar un sensor";
+"High load" = "Carga alta";
+"Hot" = "Caliente";
+"Menu bar items" = "Ítems de la barra de menús";
+"No matching sensors" = "No se encontraron sensores";
+"Normal load" = "Carga normal";
+"Normal pressure" = "Presión normal";
+"Previous" = "Anterior";
+"Quick actions" = "Acciones rápidas";
+"Select the Trash separately to empty it." = "Selecciona solo la Papelera para vaciarla.";
+"Start 30 min" = "Iniciar 30 min";
+"Stop" = "Detener";
+"Temperature sensors" = "Sensores de temperatura";
+"Very high load" = "Carga muy alta";
+"View all sensors" = "Ver todos los sensores";
+"Warm" = "Templado";

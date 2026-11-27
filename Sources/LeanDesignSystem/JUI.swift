@@ -15,22 +15,26 @@ package enum Pal {
         NSColor(srgbRed: CGFloat((hex >> 16) & 0xFF) / 255, green: CGFloat((hex >> 8) & 0xFF) / 255, blue: CGFloat(hex & 0xFF) / 255, alpha: a)
     }
 
-    package static let bg        = dyn(rgb(0xFFFFFF), rgb(0x232323))
-    package static let card      = dyn(rgb(0xEBEBE8), rgb(0x2F2F2F))
-    package static let ink       = dyn(rgb(0x161615), rgb(0xEFEFEC))
+    package static let bg        = dyn(rgb(0xEAE7E1), rgb(0x1B1E25))
+    package static let card      = dyn(rgb(0xE2E1DC), rgb(0x232731))
+    package static let ink       = dyn(rgb(0x22262C), rgb(0xF1F2F5))
     package static let ink2      = dyn(rgb(0x44443F), rgb(0xB0B0AB))
     package static let ink3      = dyn(rgb(0x66665F), rgb(0x9A9A95))
     package static let line      = dyn(NSColor(white: 0, alpha: 0.16), NSColor(white: 1, alpha: 0.10))
     package static let lineStrong = dyn(NSColor(white: 0, alpha: 0.42), NSColor(white: 1, alpha: 0.28))
-    package static let accent    = dyn(rgb(0x1D5BD6), rgb(0x6EA2FF))
-    package static let accentBg  = dyn(rgb(0x1D5BD6, 0.14), rgb(0x6EA2FF, 0.18))
+    package static let accent    = dyn(rgb(0x315CB1), rgb(0x9DBBFF))
+    package static let accentBg  = dyn(rgb(0x315CB1, 0.14), rgb(0x9DBBFF, 0.18))
+    package static let heroStart = dyn(rgb(0xD7E4F4), rgb(0x242E41))
+    package static let heroEnd = dyn(rgb(0xE2DEEE), rgb(0x293145))
+    package static let cool = dyn(rgb(0x275B80), rgb(0x92C8EE))
+    package static let info = dyn(rgb(0x594979), rgb(0xC8B4EF))
     package static let ok        = dyn(rgb(0x2F7D4F), rgb(0x6FCF97))
     package static let okBg      = dyn(rgb(0x2F7D4F, 0.14), rgb(0x6FCF97, 0.16))
     package static let warn      = dyn(rgb(0x8A5A00), rgb(0xF2C46B))
     package static let warnBg    = dyn(rgb(0xE0A01E, 0.20), rgb(0xF2C46B, 0.16))
     package static let danger    = dyn(rgb(0xB3261E), rgb(0xF2918A))
-    package static let button    = dyn(rgb(0x161615), rgb(0xEFEFEC))
-    package static let buttonInk = dyn(rgb(0xFFFFFF), rgb(0x1B1B1A))
+    package static let button    = accent
+    package static let buttonInk = dyn(rgb(0xEAE7E1), rgb(0x1B1B1A))
 }
 
 // MARK: - Card

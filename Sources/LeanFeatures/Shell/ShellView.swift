@@ -22,7 +22,8 @@ public struct MainView: View {
 
     public var body: some View {
         VStack(spacing: 0) {
-            HeaderBar(batteryManager: batteryManager, thermalManager: thermalManager, displayManager: displayManager)
+            HeaderBar()
+            JDivider()
 
             Group {
                 if ui.settingsOpen {
@@ -30,9 +31,13 @@ public struct MainView: View {
                 } else {
                     let tabs = FeatureRegistry.mainTabs
                     let tab = tabs[min(max(ui.selectedMainTab, 0), tabs.count - 1)]
-                    tab.makeView(FeatureContext(displayManager: displayManager, batteryManager: batteryManager,
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(tab.title()).font(.system(size: 24, weight: .bold)).foregroundStyle(Pal.ink)
+                            .padding(.leading, 14).padding(.top, 10)
+                        tab.makeView(FeatureContext(displayManager: displayManager, batteryManager: batteryManager,
                                                 thermalManager: thermalManager, cleanerManager: cleanerManager,
                                                 permissionsManager: permissionsManager))
+                    }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -64,11 +69,6 @@ public struct MainView: View {
 struct HeaderBar: View {
     @ObservedObject private var appearance = AppearanceManager.shared
     @ObservedObject private var ui = UIState.shared
-    @ObservedObject var batteryManager: BatteryManager
-    @ObservedObject var thermalManager: ThermalManager
-    @ObservedObject var displayManager: DisplayManager
-    @ObservedObject var languageManager: LanguageManager = LanguageManager.shared
-
     var body: some View {
         HStack(spacing: 8) {
             HStack(spacing: 8) {
@@ -79,29 +79,16 @@ struct HeaderBar: View {
                     .background(RoundedRectangle(cornerRadius: 7, style: .continuous).fill(Pal.accentBg))
                 Text("LeanMac").font(.system(size: 14, weight: .medium)).foregroundStyle(Pal.ink)
                     .lineLimit(1).fixedSize()
-                Text(UpdateManager.shared.currentVersion).font(.system(size: 11)).foregroundStyle(Pal.ink3)
-                    .lineLimit(1).fixedSize().padding(.top, 2)
+
             }
 
             Spacer(minLength: 4)
 
-            Button { withAnimation(.easeOut(duration: 0.15)) { UIState.shared.settingsOpen.toggle() } } label: {
-                Image(systemName: "gearshape")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(ui.settingsOpen ? Pal.accent : Pal.ink2)
-                    .frame(width: 24, height: 24)
+            Button { withAnimation(.easeOut(duration: 0.15)) { ui.openPermissionDetails = false; ui.settingsOpen.toggle() } } label: {
+                Label(tr("Settings"), systemImage: "slider.horizontal.3")
+                    .font(.system(size: 12)).foregroundStyle(ui.settingsOpen ? Pal.accent : Pal.ink2)
             }
             .buttonStyle(.plain)
-            .help(tr("Settings"))
-
-            Button { NSApplication.shared.terminate(nil) } label: {
-                Image(systemName: "power")
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(Pal.ink3)
-                    .frame(width: 24, height: 24)
-            }
-            .buttonStyle(.plain)
-            .help(tr("Quit LeanMac"))
         }
         .padding(.horizontal, 14)
         .padding(.top, 12)

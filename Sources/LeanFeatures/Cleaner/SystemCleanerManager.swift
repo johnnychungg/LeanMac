@@ -147,6 +147,10 @@ public class SystemCleanerManager: ObservableObject {
 
     public var totalJunkBytes: Int64 { junkCategories.reduce(0) { $0 + $1.sizeBytes } }
     public var selectedJunkBytes: Int64 { junkCategories.reduce(0) { $0 + $1.selectedBytes } }
+    var includesEntireTrash: Bool {
+        junkCategories.contains { $0.children.contains { $0.id == "trash-all" && $0.isSelected } }
+    }
+
     public var selectedJunkCount: Int { junkCategories.reduce(0) { $0 + $1.selectedCount } }
 
     public var filteredApps: [InstalledAppItem] {
@@ -292,8 +296,8 @@ public class SystemCleanerManager: ObservableObject {
         return 0
     }
 
-    nonisolated private static func emptyTrashViaFinder() {
-        _ = Shell.runner.execute("/usr/bin/osascript", arguments: ["-e", "tell application \"Finder\" to empty trash"], timeout: 120)
+    nonisolated private static func emptyTrashViaFinder() -> Bool {
+        Shell.runner.execute("/usr/bin/osascript", arguments: ["-e", "tell application \"Finder\" to empty trash"], timeout: 120).exitCode == 0
     }
 
     /// Scans the children of a folder and computes sizes in parallel.
@@ -405,33 +409,42 @@ public class SystemCleanerManager: ObservableObject {
 
         let preview = selected.prefix(10).map { "• \($0.item.name) (\($0.item.sizeFormatted))" }.joined(separator: "\n")
         let more = selected.count > 10 ? "\n" + tr("… and \(selected.count - 10) more items") : ""
-        guard confirm(
-            tr("Clean \(selected.count) item(s) (\(Self.formatBytes(total)))?"),
-            tr("These files are deleted permanently, not moved to the Trash:\n\n\(preview)\(more)"),
-            button: tr("Delete")
-        ) else { return }
+        let emptyingTrash = includesEntireTrash
+        if emptyingTrash && selected.count > 1 {
+            notify(tr("Empty Trash"), tr("Select the Trash separately to empty it."))
+            return
+        }
+        let title = emptyingTrash ? tr("Empty Trash") : tr("Move \(selected.count) file(s) to the Trash?")
+        let message = emptyingTrash
+            ? tr("These files are deleted permanently, not moved to the Trash:\n\n\(preview)\(more)")
+            : tr("Total \(Self.formatBytes(total)), recoverable from the Trash:\n\n\(preview)\(more)")
+        guard confirm(title, message, button: emptyingTrash ? tr("Delete") : tr("Move to Trash")) else { return }
 
         isCleaningJunk = true
         cleanedMessage = nil
 
         DispatchQueue.global(qos: .userInitiated).async {
-            let fm = FileManager.default
-            var freed: Int64 = 0
+            var completed = 0
+            var bytes: Int64 = 0
             for entry in selected {
-                if entry.item.id == "trash-all" {
-                    Self.emptyTrashViaFinder()
-                    freed += entry.item.sizeBytes
-                } else if (try? fm.removeItem(at: entry.item.url)) != nil {
-                    freed += entry.item.sizeBytes
+                let success = emptyingTrash ? Self.emptyTrashViaFinder() : Self.trash(entry.item.url)
+                if success {
+                    completed += 1
+                    bytes += entry.item.sizeBytes
                 }
             }
+            let completedCount = completed
+            let completedBytes = bytes
             NSSound(named: "Glass")?.play()
             DispatchQueue.main.async {
                 self.isCleaningJunk = false
                 self.lastCleanedTimestamp = Date()
-                let freedStr = Self.formatBytes(freed)
-                self.cleanedMessage = tr("Cleaned \(freedStr)")
-                appLog("✨ SystemCleaner: Cleaned \(freedStr)")
+                let size = Self.formatBytes(completedBytes)
+                if completedCount < selected.count {
+                    self.cleanedMessage = tr("Could not move \(selected.count - completedCount) file(s)")
+                } else {
+                    self.cleanedMessage = emptyingTrash ? tr("Cleaned \(size)") : tr("Moved \(completedCount) file(s) to the Trash (\(size))")
+                }
                 self.scanJunk()
             }
         }

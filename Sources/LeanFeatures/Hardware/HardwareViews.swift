@@ -72,7 +72,7 @@ struct SMCPowerView: View {
     }
 
     private var statusTitle: String {
-        if isLocked { return tr("Charge locked at \(batteryManager.chargeLimit)%") }
+        if isLocked { return tr("Charge locked at \(batteryManager.chargeLimit) %") }
         if batteryManager.isCharging { return tr("Charging") }
         if batteryManager.isPluggedIn { return tr("Plugged in") }
         return tr("On battery")
@@ -99,40 +99,29 @@ struct SMCPowerView: View {
             )
         }
 
-        // Pin
-        HStack(spacing: 14) {
-            ZStack {
-                Circle().stroke(Pal.lineStrong.opacity(0.5), lineWidth: 8)
-                Circle()
-                    .trim(from: 0, to: CGFloat(min(max(batteryManager.currentLevel, 0), 100)) / 100)
-                    .stroke(Pal.accent, style: StrokeStyle(lineWidth: 8, lineCap: .round))
-                    .rotationEffect(.degrees(-90))
-                Text("\(batteryManager.currentLevel)%")
-                    .font(.system(size: 22, weight: .medium)).foregroundStyle(Pal.ink)
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(tr("Health")).font(.caption).foregroundStyle(Pal.ink2)
+                Text("\(batteryManager.healthPercent) %").font(.system(size: 30, weight: .semibold)).monospacedDigit()
             }
-            .frame(width: 88, height: 88)
-
-            VStack(alignment: .leading, spacing: 3) {
-                Text(statusTitle).font(.system(size: 14, weight: .medium)).foregroundStyle(Pal.ink)
-                Text(statusDetail).font(.system(size: 12)).foregroundStyle(Pal.ink2)
-                HStack(spacing: 6) {
-                    if batteryManager.adapterWatts > 0 && batteryManager.isPluggedIn {
-                        JStatusChip(text: "\(batteryManager.adapterWatts)W", icon: "powerplug")
-                    }
-                    JStatusChip(text: String(format: "%.1fW", abs(batteryManager.wattage)), icon: "waveform.path.ecg")
-                }
-                .padding(.top, 4)
-            }
-            Spacer(minLength: 0)
-        }
-        .jCard()
-
-        HStack(spacing: 6) {
-            JTile(label: tr("Health"), value: "\(batteryManager.healthPercent)%")
+            Spacer()
             JTile(label: tr("Cycles"), value: "\(batteryManager.cycleCount)")
-            JTile(label: tr("Temp"), value: batteryManager.temperature > 0 ? String(format: "%.0f°C", batteryManager.temperature) : "–")
-            JTile(label: tr("Adapter"), value: batteryManager.adapterWatts > 0 ? "\(batteryManager.adapterWatts)W" : "–")
-        }
+            JTile(label: tr("Temp"), value: batteryManager.temperature > 0 ? String(format: "%.0f °C", batteryManager.temperature) : "–")
+        }.jCard()
+
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text(statusTitle).font(.headline)
+                Spacer()
+                Text("\(batteryManager.currentLevel) %").monospacedDigit()
+            }
+            Text(statusDetail).font(.caption).foregroundStyle(Pal.ink2)
+            HStack {
+                if batteryManager.adapterWatts > 0 { Text(tr("Adapter") + " · \(batteryManager.adapterWatts) W") }
+                Spacer()
+                Label(String(format: "%.1f W", abs(batteryManager.wattage)), systemImage: "waveform.path.ecg")
+            }.font(.caption)
+        }.jCard()
 
         ChargeLockCard(batteryManager: batteryManager)
 
@@ -182,7 +171,7 @@ struct ChargeLockCard: View {
                 )
             )
             if batteryManager.isProtectionEnabled {
-                JSegmented(items: ["70%", "80%", "90%"], selection: Binding(
+                JSegmented(items: ["70 %", "80 %", "90 %"], selection: Binding(
                     get: { limitIndex },
                     set: { idx in
                         let val = [70, 80, 90][idx]
@@ -314,13 +303,16 @@ struct CalibrationView: View {
 
 
 /// One metric card: icon + name, pin-to-menu-bar buttons on the right, content below.
-private enum MonLevel {
+enum MonLevel {
     case normal, warn, danger
-    var color: Color { self == .normal ? Pal.ink : (self == .warn ? Pal.warn : Pal.danger) }
+    var color: Color { self == .normal ? Pal.cool : (self == .warn ? Pal.warn : Pal.danger) }
     static func percent(_ v: Double) -> MonLevel { v >= 90 ? .danger : (v >= 70 ? .warn : .normal) }
     static func temp(_ v: Double) -> MonLevel {
         v >= ThermalManager.hotThreshold ? .danger : (v >= ThermalManager.warmThreshold ? .warn : .normal)
     }
+    var temperatureLabel: String { self == .danger ? tr("Hot") : (self == .warn ? tr("Warm") : tr("Cool")) }
+    var loadLabel: String { self == .danger ? tr("Very high load") : (self == .warn ? tr("High load") : tr("Normal load")) }
+    var pressureLabel: String { self == .danger ? tr("Critical pressure") : (self == .warn ? tr("Elevated pressure") : tr("Normal pressure")) }
     func worse(_ o: MonLevel) -> MonLevel { (self == .danger || o == .danger) ? .danger : ((self == .warn || o == .warn) ? .warn : .normal) }
 }
 
@@ -359,17 +351,22 @@ private struct MonRow: View {
     var valueLevel: MonLevel = .normal
     var secondary: String = ""
     var secondaryLevel: MonLevel = .normal
+    var status: String?
+    var normalColor = Pal.cool
 
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: icon).font(.system(size: 13)).foregroundStyle(Pal.accent).frame(width: 18)
-            Text(title).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(title).font(.system(size: 13, weight: .medium))
+                if let status { Text(status).font(.caption2).foregroundStyle(Pal.ink2) }
+            }
             Spacer(minLength: 4)
             Text(value).font(.system(size: 14, weight: .semibold)).monospacedDigit()
-                .foregroundStyle(valueLevel.color)
-                .frame(width: 48, alignment: .trailing)
+                .foregroundStyle(valueLevel == .normal ? normalColor : valueLevel.color)
+                .frame(width: 59, alignment: .trailing)
             Text(secondary).font(.system(size: 12)).monospacedDigit()
-                .foregroundStyle(secondaryLevel == .normal ? Pal.ink3 : secondaryLevel.color)
+                .foregroundStyle(secondary.contains("°C") ? secondaryLevel.color : Pal.ink2)
                 .frame(width: 92, alignment: .trailing)
         }
         .frame(height: 34)
@@ -382,15 +379,10 @@ struct ThermalView: View {
     @ObservedObject var monitor: SystemMonitorManager = SystemMonitorManager.shared
     @ObservedObject var battery: BatteryManager = BatteryManager.shared
 
-    private func t(_ v: Double) -> String { v > 0 ? String(format: "%.0f°C", v) : "–" }
-    private func pct(_ v: Double) -> String { "\(Int(v.rounded()))%" }
+    @State private var browsingSensors = false
 
-    private var levelKind: JStatusChip.Kind {
-        switch thermalManager.thermalLevel {
-        case .cool: return .ok
-        case .warm, .hot: return .warn
-        }
-    }
+    private func t(_ v: Double) -> String { v > 0 ? String(format: "%.0f °C", v) : "–" }
+    private func pct(_ v: Double) -> String { "\(Int(v.rounded())) %" }
 
     private var diskInfo: (used: Double, total: Double)? {
         let url = URL(fileURLWithPath: NSHomeDirectory())
@@ -405,13 +397,22 @@ struct ThermalView: View {
             .onAppear { monitor.beginPreview() }
             .onDisappear { monitor.endPreview() }
 
+        if browsingSensors {
+            SensorBrowser(readings: thermalManager.detailedSensors) { browsingSensors = false }
+        } else {
+            monitorContent
+        }
+    }
+
+    @ViewBuilder private var monitorContent: some View {
         // Machine overview (one line)
         HStack(spacing: 8) {
             Image(systemName: "laptopcomputer").font(.system(size: 13)).foregroundStyle(Pal.accent)
             Text(thermalManager.machineModelName).font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink).lineLimit(1)
             Spacer()
-            JStatusChip(text: thermalManager.isThrottling ? tr("Throttled") : tr("Normal"),
-                        kind: thermalManager.isThrottling ? .warn : levelKind)
+            let level = MonLevel.temp(thermalManager.displayTemp)
+            Text(thermalManager.isThrottling ? tr("Throttled") : (thermalManager.displayTemp > 0 ? level.temperatureLabel : "–"))
+                .font(.caption.weight(.semibold)).foregroundStyle(thermalManager.isThrottling ? Pal.warn : level.color)
             Button { thermalManager.refreshMetrics() } label: {
                 Image(systemName: "arrow.clockwise").font(.system(size: 12)).foregroundStyle(Pal.ink3)
             }
@@ -425,17 +426,17 @@ struct ThermalView: View {
         // Six metrics in one card
         VStack(spacing: 0) {
             MonRow(icon: "cpu", title: "CPU", value: pct(monitor.cpuUsagePercent), valueLevel: MonLevel.percent(monitor.cpuUsagePercent),
-                   secondary: t(thermalManager.cpuAvgTemp), secondaryLevel: MonLevel.temp(thermalManager.cpuAvgTemp))
+                   secondary: t(thermalManager.cpuAvgTemp), secondaryLevel: MonLevel.temp(thermalManager.cpuAvgTemp), status: MonLevel.percent(monitor.cpuUsagePercent).loadLabel)
             JDivider().padding(.leading, 38)
-            MonRow(icon: "memorychip", title: "RAM", value: pct(monitor.ramUsagePercent),
+            MonRow(icon: "memorychip", title: "RAM", value: monitor.memoryStats == nil ? "–" : pct(monitor.ramUsagePercent),
                    valueLevel: monitor.memoryPressure == .critical ? .danger : (monitor.memoryPressure == .warning ? .warn : .normal),
-                   secondary: monitor.memoryStats?.summary ?? "")
+                   secondary: monitor.memoryStats?.summary ?? "", status: monitor.memoryStats == nil ? nil : (monitor.memoryPressure == .critical ? MonLevel.danger : (monitor.memoryPressure == .warning ? .warn : .normal)).pressureLabel, normalColor: Pal.info)
             JDivider().padding(.leading, 38)
             MonRow(icon: "display", title: "GPU", value: monitor.hasGPU ? pct(monitor.gpuUsagePercent) : "–",
                    valueLevel: MonLevel.percent(monitor.gpuUsagePercent),
-                   secondary: t(thermalManager.gpuAvgTemp), secondaryLevel: MonLevel.temp(thermalManager.gpuAvgTemp))
+                   secondary: t(thermalManager.gpuAvgTemp), secondaryLevel: MonLevel.temp(thermalManager.gpuAvgTemp), status: monitor.hasGPU ? MonLevel.percent(monitor.gpuUsagePercent).loadLabel : nil)
             JDivider().padding(.leading, 38)
-            MonRow(icon: battery.isCharging ? "battery.100.bolt" : "battery.100", title: tr("Battery"), value: "\(battery.currentLevel)%",
+            MonRow(icon: battery.isCharging ? "battery.100.bolt" : "battery.100", title: tr("Battery"), value: "\(battery.currentLevel) %",
                    valueLevel: battery.currentLevel <= 10 ? .danger : (battery.currentLevel <= 20 ? .warn : .normal),
                    secondary: t(thermalManager.batteryTemp), secondaryLevel: MonLevel.temp(thermalManager.batteryTemp))
             if let d = diskInfo {
@@ -461,12 +462,20 @@ struct ThermalView: View {
         .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Pal.card))
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
 
+        DisclosureGroup(tr("Menu bar items")) {
+            Toggle("CPU", isOn: $monitor.showCPUMenuBar)
+            Toggle("RAM", isOn: $monitor.showRAMMenuBar)
+            if monitor.hasGPU { Toggle("GPU", isOn: $monitor.showGPUMenuBar) }
+            Toggle(tr("Temperature"), isOn: $thermalManager.showMenuBarMetrics)
+            Toggle(tr("Network"), isOn: $monitor.showNetMenuBar)
+        }.toggleStyle(.switch).controlSize(.small).jCard()
+
         // Hot spots and sensor details
         if thermalManager.hotspotTemp > 0 {
             HStack {
                 Text(tr("Hottest spot")).font(.system(size: 12)).foregroundStyle(Pal.ink2)
                 Spacer()
-                Text(t(thermalManager.hotspotTemp)).font(.system(size: 12, weight: .medium)).foregroundStyle(Pal.ink)
+                Text(t(thermalManager.hotspotTemp)).font(.system(size: 12, weight: .medium)).foregroundStyle(MonLevel.temp(thermalManager.hotspotTemp).color)
             }
             .padding(.horizontal, 12).padding(.vertical, 8)
             .frame(maxWidth: .infinity)
@@ -477,9 +486,10 @@ struct ThermalView: View {
             VStack(spacing: 0) {
                 Button { withAnimation(.easeOut(duration: 0.15)) { thermalManager.isDetailExpanded.toggle() } } label: {
                     HStack {
-                        Text(tr("\(thermalManager.detailedSensors.count) sensor details"))
+                        Label(tr("Temperature sensors"), systemImage: "thermometer.medium")
                             .font(.system(size: 13, weight: .medium)).foregroundStyle(Pal.ink)
                         Spacer()
+                        Text("\(thermalManager.detailedSensors.count)").font(.caption).foregroundStyle(Pal.ink2)
                         Image(systemName: thermalManager.isDetailExpanded ? "chevron.up" : "chevron.down")
                             .font(.system(size: 11, weight: .medium)).foregroundStyle(Pal.ink3)
                     }
@@ -489,14 +499,13 @@ struct ThermalView: View {
 
                 if thermalManager.isDetailExpanded {
                     VStack(spacing: 0) {
-                        ForEach(thermalManager.detailedSensors) { s in
+                        ForEach(thermalManager.detailedSensors.prefix(3)) { s in
                             JDivider().padding(.top, 6)
-                            HStack {
-                                Text(s.displayName).font(.system(size: 12)).foregroundStyle(Pal.ink2).lineLimit(1)
-                                Spacer()
-                                Text(String(format: "%.1f°C", s.temp)).font(.system(size: 12, weight: .medium)).foregroundStyle(Pal.ink)
-                            }
-                            .padding(.top, 6)
+                            SensorValueRow(reading: s)
+                        }
+                        if thermalManager.detailedSensors.count > 3 {
+                            Button(tr("View all sensors")) { browsingSensors = true }
+                                .buttonStyle(.link)
                         }
                     }
                     .padding(.top, 4)

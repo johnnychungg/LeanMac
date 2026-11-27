@@ -123,7 +123,8 @@ private struct JunkView: View {
                 if manager.isCleaningJunk {
                     HStack(spacing: 6) { Spinner(); Text(tr("Cleaning…")) }
                 } else if manager.selectedJunkCount > 0 {
-                    Text(tr("Clean \(manager.selectedJunkCount) item(s) · \(SystemCleanerManager.formatBytes(manager.selectedJunkBytes))"))
+                    Text((manager.includesEntireTrash ? tr("Empty Trash") : tr("Move to Trash")) +
+                         " · \(manager.selectedJunkCount) · \(SystemCleanerManager.formatBytes(manager.selectedJunkBytes))")
                 } else {
                     Text(tr("Select items to clean"))
                 }

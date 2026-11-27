@@ -84,9 +84,26 @@ struct DisplayModeTests {
         #expect(manager.catalogs[1]?.current == option(3, 60000, large))
         #expect(manager.catalogs[2] == other)
         #expect(manager.previous[1] == option(1, 60000))
+        #expect(manager.pendingRevert?.secondsLeft == DisplayModeManager.confirmSeconds)
+        manager.keepChanges()
+        #expect(manager.pendingRevert == nil)
         manager.undo(for: 1)
         try await waitForChange(manager)
         #expect(manager.catalogs[1]?.current == option(1, 60000))
+        #expect(manager.previous[1] == nil)
+    }
+
+    @Test @MainActor func unconfirmedManualChangeCanRevertAndBlocksOverlappingChanges() async throws {
+        let manager = DisplayModeManager(backend: FakeDisplayModes())
+        manager.refresh(displays: [1, 2])
+        manager.select(option(2, 120000), for: 1)
+        try await waitForChange(manager)
+        manager.select(option(1, 60000), for: 2)
+        #expect(manager.applyingDisplay == nil)
+        manager.revertNow()
+        try await waitForChange(manager)
+        #expect(manager.catalogs[1]?.current == option(1, 60000))
+        #expect(manager.catalogs[2]?.current == option(2, 120000))
         #expect(manager.previous[1] == nil)
     }
 

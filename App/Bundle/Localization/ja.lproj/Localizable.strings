@@ -1,9 +1,6 @@
-"%@ cycles" = "%@ サイクル";
 "%@ days" = "%@ 日";
-"%@ in menu bar" = "メニューバーに %@ 件";
 "%@ items" = "%@ 項目";
 "%@ left" = "残り %@";
-"%@ sensor details" = "センサー詳細 %@ 件";
 "%@d" = "%@日";
 "%@d ago" = "%@日前";
 "%@mo ago" = "%@か月前";
@@ -16,7 +13,6 @@
 "About %@h%@m left" = "残り約 %@時間%@分";
 "Accessibility" = "アクセシビリティ";
 "Accessibility missing, shortcuts are off" = "アクセシビリティが未許可のため、ショートカットはオフです";
-"Active" = "有効";
 "Adapter" = "アダプタ";
 "Add shortcut" = "ショートカットを追加";
 "Add shortcut for %@" = "%@ のショートカットを追加";
@@ -36,7 +32,6 @@
 "Applying display mode…" = "ディスプレイモードを適用中…";
 "Applying..." = "適用中...";
 "Arrange windows" = "ウインドウを整列";
-"Assign keys to actions" = "操作にキーを割り当て";
 "Auto" = "自動";
 "Auto-calibrate periodically" = "定期的に自動キャリブレーション";
 "Automatically turns off Bluetooth when lid is closed to eliminate overnight battery drain. Quit and reopen LeanMac after granting." = "蓋を閉じたときに Bluetooth を自動でオフにして、一晩の電池消耗をなくします。許可後は LeanMac を終了して開き直してください。";
@@ -77,15 +72,12 @@
 "Center" = "中央";
 "Change, add or disable key combinations" = "キーの組み合わせを変更、追加、無効化";
 "Charge limit" = "充電制限";
-"Charge limit %@%%" = "充電制限 %@%%";
 "Charge locked at %@%%" = "%@%% で充電ロック中";
 "Charging" = "充電中";
 "Charging the battery" = "バッテリーを充電中";
 "Charging to %@%% (%@%%)" = "%@%% まで充電中 (%@%%)";
 "Choose Color" = "色を選択";
 "Choose a key with modifiers." = "修飾キー付きのキーを選んでください。";
-"Clean %@ item(s) (%@)?" = "%@ 件 (%@) をクリーンアップしますか？";
-"Clean %@ item(s) · %@" = "%@ 件をクリーンアップ · %@";
 "Cleaned %@" = "%@ をクリーンアップしました";
 "Cleaner" = "クリーナー";
 "Cleaning…" = "クリーンアップ中…";
@@ -140,7 +132,6 @@
 "F1/F2 are used for brightness. Add a modifier." = "F1/F2 は輝度に使われます。修飾キーを追加してください。";
 "Files remained in original location" = "ファイルは元の場所に残りました";
 "Finder cut and paste" = "Finder の切り取りと貼り付け";
-"Finder cut/paste" = "Finder の切り取り/貼り付け";
 "Finding related files" = "関連ファイルを検索中";
 "Fully charged 100%%" = "フル充電 100%%";
 "GPU Cluster %@" = "GPU クラスタ %@";
@@ -152,7 +143,6 @@
 "HARDWARE" = "ハードウェア";
 "Hardware" = "ハードウェア";
 "Health" = "健康状態";
-"Health %@%%" = "健康状態 %@%%";
 "Highlighter" = "蛍光ペン";
 "Holding 100%% for 15 minutes." = "100%%を15分間保持中。";
 "Hot (Not throttling)" = "高温（制限なし）";
@@ -166,7 +156,6 @@
 "Interval" = "間隔";
 "Junk" = "不要ファイル";
 "Keep awake" = "スリープ防止";
-"Keep awake %@" = "スリープ防止 %@";
 "Keep awake: time is up" = "スリープ防止：時間になりました";
 "Keep ordinary window sizes, shrinking only to fit. Edge-spanning or maximized windows adapt to the destination." = "通常サイズのウインドウはそのままにし、収まらない場合のみ縮小します。端まで広げたウインドウや最大化したウインドウは移動先に合わせます。";
 "Keep window size" = "ウインドウサイズを維持";
@@ -219,7 +208,6 @@
 "Normal" = "通常";
 "Not charging" = "充電していません";
 "Not installed" = "未インストール";
-"Nothing enabled" = "有効な項目なし";
 "Notice" = "お知らせ";
 "Now charging to 100%%." = "現在 100%% まで充電中です。";
 "OK" = "OK";
@@ -300,7 +288,6 @@
 "Screen recording needed for thumbnails" = "サムネイルには画面収録が必要です";
 "Screenshot" = "スクリーンショット";
 "Screenshot annotation text" = "スクリーンショットの注釈テキスト";
-"Screenshots" = "スクリーンショット";
 "Search apps" = "アプリを検索";
 "Select apps to uninstall" = "アンインストールするアプリを選択";
 "Select files to remove" = "削除するファイルを選択";
@@ -314,7 +301,6 @@
 "Sleep Guard on lid close" = "蓋を閉じたときのスリープガード";
 "Sleep Guard: sleep report" = "スリープガード：スリープレポート";
 "Slept %@h%@m • %@" = "%@時間%@分スリープ • %@";
-"Snapping" = "スナップ";
 "Soft-disconnected" = "ソフト切断";
 "Standard charging (%@%%)" = "標準充電 (%@%%)";
 "Startup" = "スタートアップ";
@@ -328,7 +314,6 @@
 "Successfully moved" = "移動しました";
 "Successfully moved to current folder" = "現在のフォルダに移動しました";
 "Switch windows" = "ウインドウを切り替え";
-"Switcher" = "スイッチャー";
 "System default" = "システムの既定";
 "Temp" = "温度";
 "Temporary 100%% top-up" = "一時的に 100%% まで充電";
@@ -456,3 +441,28 @@
 "Reference" = "基準";
 "Waiting for your confirmation" = "確認待ち";
 "%@ is blocking keyboard shortcuts (Secure Input). Quit it to restore them." = "%@ がキーボードショートカットをブロックしています（Secure Input）。終了すると元に戻ります。";
+"About LeanMac" = "LeanMacについて";
+"Battery details" = "バッテリーの詳細";
+"Cancel top-up" = "満充電を中止";
+"Charge locked at %@ %%" = "%@ %%で充電を制限";
+"Charge to 100 %%" = "100 %%まで充電";
+"Cool" = "低温";
+"Critical pressure" = "メモリ負荷が深刻";
+"Elevated pressure" = "メモリ負荷が高い";
+"Empty Trash" = "ゴミ箱を空にする";
+"Find a sensor" = "センサーを検索";
+"High load" = "高負荷";
+"Hot" = "高温";
+"Menu bar items" = "メニューバー項目";
+"No matching sensors" = "一致するセンサーはありません";
+"Normal load" = "通常負荷";
+"Normal pressure" = "メモリ負荷は正常";
+"Previous" = "前へ";
+"Quick actions" = "クイック操作";
+"Select the Trash separately to empty it." = "空にするにはゴミ箱だけを選択してください。";
+"Start 30 min" = "30分開始";
+"Stop" = "停止";
+"Temperature sensors" = "温度センサー";
+"Very high load" = "非常に高い負荷";
+"View all sensors" = "すべてのセンサーを表示";
+"Warm" = "やや高温";

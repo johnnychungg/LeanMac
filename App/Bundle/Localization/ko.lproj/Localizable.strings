@@ -1,9 +1,6 @@
-"%@ cycles" = "%@ 사이클";
 "%@ days" = "%@일";
-"%@ in menu bar" = "메뉴 막대에 %@개";
 "%@ items" = "%@개 항목";
 "%@ left" = "%@ 남음";
-"%@ sensor details" = "센서 상세 %@개";
 "%@d" = "%@일";
 "%@d ago" = "%@일 전";
 "%@mo ago" = "%@개월 전";
@@ -16,7 +13,6 @@
 "About %@h%@m left" = "약 %@시간 %@분 남음";
 "Accessibility" = "손쉬운 사용";
 "Accessibility missing, shortcuts are off" = "손쉬운 사용 권한이 없어 단축키가 꺼져 있습니다";
-"Active" = "활성";
 "Adapter" = "어댑터";
 "Add shortcut" = "단축키 추가";
 "Add shortcut for %@" = "%@ 단축키 추가";
@@ -36,7 +32,6 @@
 "Applying display mode…" = "디스플레이 모드 적용 중…";
 "Applying..." = "적용 중...";
 "Arrange windows" = "윈도우 정렬";
-"Assign keys to actions" = "동작에 키 지정";
 "Auto" = "자동";
 "Auto-calibrate periodically" = "주기적으로 자동 보정";
 "Automatically turns off Bluetooth when lid is closed to eliminate overnight battery drain. Quit and reopen LeanMac after granting." = "덮개를 닫으면 블루투스를 자동으로 꺼서 밤사이 배터리 소모를 없앱니다. 권한을 허용한 뒤 LeanMac을 종료하고 다시 여세요.";
@@ -77,15 +72,12 @@
 "Center" = "가운데";
 "Change, add or disable key combinations" = "키 조합 변경, 추가 또는 비활성화";
 "Charge limit" = "충전 제한";
-"Charge limit %@%%" = "충전 제한 %@%%";
 "Charge locked at %@%%" = "%@%%에서 충전 잠김";
 "Charging" = "충전 중";
 "Charging the battery" = "배터리 충전 중";
 "Charging to %@%% (%@%%)" = "%@%%까지 충전 중 (%@%%)";
 "Choose Color" = "색상 선택";
 "Choose a key with modifiers." = "수정 키가 포함된 키를 선택하세요.";
-"Clean %@ item(s) (%@)?" = "%@개 항목 (%@)을(를) 정리할까요?";
-"Clean %@ item(s) · %@" = "%@개 항목 정리 · %@";
 "Cleaned %@" = "%@ 정리됨";
 "Cleaner" = "클리너";
 "Cleaning…" = "정리 중…";
@@ -140,7 +132,6 @@
 "F1/F2 are used for brightness. Add a modifier." = "F1/F2는 밝기에 사용됩니다. 수정 키를 추가하세요.";
 "Files remained in original location" = "파일이 원래 위치에 남아 있습니다";
 "Finder cut and paste" = "Finder 오려두기 및 붙여넣기";
-"Finder cut/paste" = "Finder 오려두기/붙여넣기";
 "Finding related files" = "관련 파일 찾는 중";
 "Fully charged 100%%" = "완전 충전 100%%";
 "GPU Cluster %@" = "GPU 클러스터 %@";
@@ -152,7 +143,6 @@
 "HARDWARE" = "하드웨어";
 "Hardware" = "하드웨어";
 "Health" = "상태";
-"Health %@%%" = "상태 %@%%";
 "Highlighter" = "형광펜";
 "Holding 100%% for 15 minutes." = "100%%를 15분간 유지 중.";
 "Hot (Not throttling)" = "뜨거움 (성능 제한 없음)";
@@ -166,7 +156,6 @@
 "Interval" = "간격";
 "Junk" = "정크";
 "Keep awake" = "화면 켜둠";
-"Keep awake %@" = "화면 켜둠 %@";
 "Keep awake: time is up" = "화면 켜둠: 시간이 끝났습니다";
 "Keep ordinary window sizes, shrinking only to fit. Edge-spanning or maximized windows adapt to the destination." = "일반 윈도우 크기는 유지하고 맞출 때만 줄입니다. 가장자리에 붙인 윈도우나 최대화된 윈도우는 대상 디스플레이에 맞춥니다.";
 "Keep window size" = "윈도우 크기 유지";
@@ -219,7 +208,6 @@
 "Normal" = "보통";
 "Not charging" = "충전 중 아님";
 "Not installed" = "설치되지 않음";
-"Nothing enabled" = "활성화된 항목 없음";
 "Notice" = "알림";
 "Now charging to 100%%." = "지금 100%%까지 충전 중입니다.";
 "OK" = "확인";
@@ -300,7 +288,6 @@
 "Screen recording needed for thumbnails" = "미리보기에 화면 기록이 필요합니다";
 "Screenshot" = "스크린샷";
 "Screenshot annotation text" = "스크린샷 주석 텍스트";
-"Screenshots" = "스크린샷";
 "Search apps" = "앱 검색";
 "Select apps to uninstall" = "제거할 앱 선택";
 "Select files to remove" = "삭제할 파일 선택";
@@ -314,7 +301,6 @@
 "Sleep Guard on lid close" = "덮개를 닫을 때 슬립 가드";
 "Sleep Guard: sleep report" = "슬립 가드: 잠자기 보고서";
 "Slept %@h%@m • %@" = "%@시간 %@분 동안 잠듦 • %@";
-"Snapping" = "스냅";
 "Soft-disconnected" = "소프트 연결 해제";
 "Standard charging (%@%%)" = "표준 충전 (%@%%)";
 "Startup" = "시작 항목";
@@ -328,7 +314,6 @@
 "Successfully moved" = "이동 완료";
 "Successfully moved to current folder" = "현재 폴더로 이동 완료";
 "Switch windows" = "윈도우 전환";
-"Switcher" = "전환기";
 "System default" = "시스템 기본값";
 "Temp" = "온도";
 "Temporary 100%% top-up" = "일시적으로 100%%까지 충전";
@@ -456,3 +441,28 @@
 "Reference" = "기준";
 "Waiting for your confirmation" = "확인 대기 중";
 "%@ is blocking keyboard shortcuts (Secure Input). Quit it to restore them." = "%@ 이(가) 키보드 단축키를 막고 있습니다(Secure Input). 종료하면 복구됩니다.";
+"About LeanMac" = "LeanMac 정보";
+"Battery details" = "배터리 세부 정보";
+"Cancel top-up" = "완충 취소";
+"Charge locked at %@ %%" = "%@ %%에서 충전 제한";
+"Charge to 100 %%" = "100 %%까지 충전";
+"Cool" = "서늘함";
+"Critical pressure" = "메모리 압력 매우 높음";
+"Elevated pressure" = "메모리 압력 높음";
+"Empty Trash" = "휴지통 비우기";
+"Find a sensor" = "센서 검색";
+"High load" = "부하 높음";
+"Hot" = "뜨거움";
+"Menu bar items" = "메뉴 막대 항목";
+"No matching sensors" = "일치하는 센서 없음";
+"Normal load" = "부하 정상";
+"Normal pressure" = "메모리 압력 정상";
+"Previous" = "이전";
+"Quick actions" = "빠른 작업";
+"Select the Trash separately to empty it." = "휴지통을 비우려면 휴지통만 선택하세요.";
+"Start 30 min" = "30분 시작";
+"Stop" = "중지";
+"Temperature sensors" = "온도 센서";
+"Very high load" = "부하 매우 높음";
+"View all sensors" = "모든 센서 보기";
+"Warm" = "따뜻함";

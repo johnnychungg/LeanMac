@@ -118,6 +118,7 @@ final class DisplayModeManager: ObservableObject {
         guard let pending = pendingRevert else { return }
         pendingRevert = nil
         let backend = self.backend
+        for id in pending.originals.keys { previous[id] = nil }
         let work = { for (id, old) in pending.originals { _ = backend.apply(old, to: id) } }
         if wait { work(); return }
         applyingDisplay = pending.originals.keys.first
@@ -145,7 +146,7 @@ final class DisplayModeManager: ObservableObject {
     }
 
     func select(_ option: DisplayModeOption, for display: CGDirectDisplayID, undoing: Bool = false) {
-        guard applyingDisplay == nil, let catalog = catalogs[display], catalog.modes.contains(option) else { return }
+        guard pendingRevert == nil, applyingDisplay == nil, let catalog = catalogs[display], catalog.modes.contains(option) else { return }
         guard option != catalog.current else { return }
         let original = catalog.current
         applyingDisplay = display
@@ -161,6 +162,10 @@ final class DisplayModeManager: ObservableObject {
                 if result == .success, let actual = self.catalogs[display]?.current,
                    actual.resolution == option.resolution && actual.milliHertz == option.milliHertz {
                     self.previous[display] = !undoing && self.catalogs[display]?.modes.contains(original) == true ? original : nil
+                    if !undoing {
+                        self.pendingRevert = PendingRevert(originals: [display: original], secondsLeft: Self.confirmSeconds)
+                        self.startCountdown()
+                    }
                 } else {
                     self.errors[display] = result == .success
                         ? tr("macOS did not apply that mode. Try another mode.")
@@ -171,6 +176,10 @@ final class DisplayModeManager: ObservableObject {
     }
 
     func undo(for display: CGDirectDisplayID) {
+        if pendingRevert?.originals[display] != nil {
+            revertNow()
+            return
+        }
         guard let option = previous[display] else { return }
         select(option, for: display, undoing: true)
     }

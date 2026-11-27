@@ -66,7 +66,7 @@ are very welcome.
 - **Junk**: app caches, logs and crash reports, Trash and Xcode DerivedData, listed with sizes. Folders macOS owns are hidden instead of being shown locked.
 - **Uninstall**: removes an app together with its leftovers.
 - **Large files**: finds what is eating your disk.
-- Everything is moved to the **Trash**, so a mistake can be undone.
+- Selected files and apps move to the **Trash**. Emptying the Trash is a separate, permanent action.
 
 ### 🌐 Languages
 The whole interface, notifications and macOS permission prompts are translated into **six languages**, picked from a dropdown in Settings:
@@ -112,7 +112,7 @@ are signed with your own identity, so they cannot update in place; update those 
 - **Privileged helper.** The charge limit writes to the SMC, which needs root. Installing it asks for your administrator password once and adds a small helper under `/Library/PrivilegedHelperTools/com.local.leanmac.*` and a sudoers rule limited to your user. The helper accepts a fixed set of commands. Without it, everything else still works. Details and the threat model: [SECURITY.md](.github/SECURITY.md).
 - **Private macOS interfaces.** A few features use undocumented APIs that may break on any macOS update. They fail soft (the feature turns off). The list is in [Docs/third-party.md](Docs/third-party.md).
 - **Honest status.** Battery behaviour (charge limit, calibration, sleep and wake) has been tested on a limited set of Macs. Watch the battery the first days and [report problems](https://github.com/johnnychungg/LeanMac/issues).
-- **Display modes** are applied without an automatic revert. If a resolution leaves the screen unreadable, switch back in System Settings > Displays.
+- **Display modes** revert after 15 seconds unless you confirm the change.
 
 ## Build from source
 

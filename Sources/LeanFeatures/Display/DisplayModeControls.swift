@@ -26,7 +26,7 @@ struct DisplayModeControls<Trailing: View>: View {
                         Text("\(catalog.current.resolution.width) × \(catalog.current.resolution.height)").lineLimit(1)
                     }
                     .fixedSize()
-                    .disabled(catalog.resolutions.count < 2 || manager.applyingDisplay != nil)
+                    .disabled(catalog.resolutions.count < 2 || manager.applyingDisplay != nil || manager.pendingRevert != nil)
                     .help(catalog.current.resolution.title + " — " + tr("UI resolution; HiDPI provides sharper text."))
                     .accessibilityLabel(tr("Display resolution"))
                     .accessibilityValue(catalog.current.resolution.title)
@@ -43,7 +43,7 @@ struct DisplayModeControls<Trailing: View>: View {
                         Text(catalog.current.milliHertz == 0 ? tr("Auto") : catalog.current.refreshTitle).lineLimit(1)
                     }
                     .fixedSize()
-                    .disabled(catalog.rates(for: catalog.current.resolution).count < 2 || manager.applyingDisplay != nil)
+                    .disabled(catalog.rates(for: catalog.current.resolution).count < 2 || manager.applyingDisplay != nil || manager.pendingRevert != nil)
                     .help(tr("Refresh rate: only modes supported by macOS at this resolution are listed."))
                     .accessibilityLabel(tr("Display refresh rate"))
                     .accessibilityValue(catalog.current.refreshTitle)
@@ -73,10 +73,16 @@ struct DisplayModeControls<Trailing: View>: View {
                 Text(error).font(.system(size: FS.caption)).foregroundStyle(Tone.warn)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            if manager.previous[displayID] != nil {
+            if let pending = manager.pendingRevert, pending.originals[displayID] != nil {
+                Text(tr("Going back automatically in \(pending.secondsLeft) s if you do nothing.")).font(.caption)
+                HStack {
+                    Button(tr("Keep")) { manager.keepChanges() }
+                    Button(tr("Go back now")) { manager.revertNow() }
+                }.controlSize(.small)
+            } else if manager.previous[displayID] != nil {
                 Button(tr("Undo display mode change")) { manager.undo(for: displayID) }
                     .font(.system(size: FS.caption)).controlSize(.small)
-                    .disabled(manager.applyingDisplay != nil)
+                    .disabled(manager.applyingDisplay != nil || manager.pendingRevert != nil)
             }
         }
     }

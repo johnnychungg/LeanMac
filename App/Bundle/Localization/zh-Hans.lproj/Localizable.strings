@@ -1,9 +1,6 @@
-"%@ cycles" = "%@ 次循环";
 "%@ days" = "%@ 天";
-"%@ in menu bar" = "菜单栏中 %@ 项";
 "%@ items" = "%@ 项";
 "%@ left" = "剩余 %@";
-"%@ sensor details" = "%@ 个传感器详情";
 "%@d" = "%@天";
 "%@d ago" = "%@天前";
 "%@mo ago" = "%@个月前";
@@ -16,7 +13,6 @@
 "About %@h%@m left" = "剩余约 %@小时%@分钟";
 "Accessibility" = "辅助功能";
 "Accessibility missing, shortcuts are off" = "缺少辅助功能权限，快捷键已关闭";
-"Active" = "已启用";
 "Adapter" = "电源适配器";
 "Add shortcut" = "添加快捷键";
 "Add shortcut for %@" = "为 %@ 添加快捷键";
@@ -36,7 +32,6 @@
 "Applying display mode…" = "正在应用显示模式…";
 "Applying..." = "正在应用...";
 "Arrange windows" = "排列窗口";
-"Assign keys to actions" = "为操作分配按键";
 "Auto" = "自动";
 "Auto-calibrate periodically" = "定期自动校准";
 "Automatically turns off Bluetooth when lid is closed to eliminate overnight battery drain. Quit and reopen LeanMac after granting." = "合上盖子时自动关闭蓝牙，消除夜间耗电。授权后请退出并重新打开 LeanMac。";
@@ -77,15 +72,12 @@
 "Center" = "居中";
 "Change, add or disable key combinations" = "更改、添加或禁用组合键";
 "Charge limit" = "充电上限";
-"Charge limit %@%%" = "充电上限 %@%%";
 "Charge locked at %@%%" = "已在 %@%% 锁定充电";
 "Charging" = "正在充电";
 "Charging the battery" = "正在给电池充电";
 "Charging to %@%% (%@%%)" = "正在充电至 %@%% (%@%%)";
 "Choose Color" = "选择颜色";
 "Choose a key with modifiers." = "请选择带修饰键的按键。";
-"Clean %@ item(s) (%@)?" = "清理 %@ 项 (%@)？";
-"Clean %@ item(s) · %@" = "清理 %@ 项 · %@";
 "Cleaned %@" = "已清理 %@";
 "Cleaner" = "清理";
 "Cleaning…" = "正在清理…";
@@ -140,7 +132,6 @@
 "F1/F2 are used for brightness. Add a modifier." = "F1/F2 用于亮度。请添加修饰键。";
 "Files remained in original location" = "文件保留在原位置";
 "Finder cut and paste" = "Finder 剪切和粘贴";
-"Finder cut/paste" = "Finder 剪切/粘贴";
 "Finding related files" = "正在查找相关文件";
 "Fully charged 100%%" = "已充满 100%%";
 "GPU Cluster %@" = "GPU 集群 %@";
@@ -152,7 +143,6 @@
 "HARDWARE" = "硬件";
 "Hardware" = "硬件";
 "Health" = "健康度";
-"Health %@%%" = "健康度 %@%%";
 "Highlighter" = "荧光笔";
 "Holding 100%% for 15 minutes." = "正在保持 100%% 15 分钟。";
 "Hot (Not throttling)" = "较热（未降频）";
@@ -166,7 +156,6 @@
 "Interval" = "间隔";
 "Junk" = "垃圾文件";
 "Keep awake" = "保持唤醒";
-"Keep awake %@" = "保持唤醒 %@";
 "Keep awake: time is up" = "保持唤醒：时间已到";
 "Keep ordinary window sizes, shrinking only to fit. Edge-spanning or maximized windows adapt to the destination." = "保持普通窗口大小，仅在需要时缩小以适应。贴边或最大化的窗口会适应目标显示器。";
 "Keep window size" = "保持窗口大小";
@@ -219,7 +208,6 @@
 "Normal" = "正常";
 "Not charging" = "未在充电";
 "Not installed" = "未安装";
-"Nothing enabled" = "未启用任何项目";
 "Notice" = "提示";
 "Now charging to 100%%." = "正在充电至 100%%。";
 "OK" = "好";
@@ -300,7 +288,6 @@
 "Screen recording needed for thumbnails" = "缩略图需要屏幕录制权限";
 "Screenshot" = "截图";
 "Screenshot annotation text" = "截图标注文字";
-"Screenshots" = "截图";
 "Search apps" = "搜索应用";
 "Select apps to uninstall" = "选择要卸载的应用";
 "Select files to remove" = "选择要移除的文件";
@@ -314,7 +301,6 @@
 "Sleep Guard on lid close" = "合盖时睡眠守护";
 "Sleep Guard: sleep report" = "睡眠守护：睡眠报告";
 "Slept %@h%@m • %@" = "睡眠了 %@小时%@分钟 • %@";
-"Snapping" = "吸附";
 "Soft-disconnected" = "已软断开";
 "Standard charging (%@%%)" = "标准充电 (%@%%)";
 "Startup" = "启动";
@@ -328,7 +314,6 @@
 "Successfully moved" = "已成功移动";
 "Successfully moved to current folder" = "已成功移动到当前文件夹";
 "Switch windows" = "切换窗口";
-"Switcher" = "切换器";
 "System default" = "系统默认";
 "Temp" = "温度";
 "Temporary 100%% top-up" = "临时充满 100%%";
@@ -456,3 +441,28 @@
 "Reference" = "基准";
 "Waiting for your confirmation" = "等待您确认";
 "%@ is blocking keyboard shortcuts (Secure Input). Quit it to restore them." = "%@ 正在阻止键盘快捷键（Secure Input）。退出它即可恢复。";
+"About LeanMac" = "关于 LeanMac";
+"Battery details" = "电池详情";
+"Cancel top-up" = "取消充满";
+"Charge locked at %@ %%" = "充电上限为 %@ %%";
+"Charge to 100 %%" = "充至 100 %%";
+"Cool" = "凉爽";
+"Critical pressure" = "内存压力严重";
+"Elevated pressure" = "内存压力较高";
+"Empty Trash" = "清倒废纸篓";
+"Find a sensor" = "搜索传感器";
+"High load" = "高负载";
+"Hot" = "高温";
+"Menu bar items" = "菜单栏项目";
+"No matching sensors" = "未找到匹配的传感器";
+"Normal load" = "正常负载";
+"Normal pressure" = "内存压力正常";
+"Previous" = "上一页";
+"Quick actions" = "快捷操作";
+"Select the Trash separately to empty it." = "请单独选择废纸篓以将其清空。";
+"Start 30 min" = "启动 30 分钟";
+"Stop" = "停止";
+"Temperature sensors" = "温度传感器";
+"Very high load" = "负载极高";
+"View all sensors" = "查看所有传感器";
+"Warm" = "温热";
